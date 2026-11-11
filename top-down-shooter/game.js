@@ -10,7 +10,9 @@ function pressed(...codes) {
 }
 
 let mouse = { x: 270, y: 480, down: false };
-let touchGoal = null;
+let stick = null;
+let stickOx = 0;
+let stickOy = 0;
 
 const state = {
   x: 270, y: 480, hp: 100, kills: 0, fireCd: 0, spawnT: 0, bullets: [], enemies: [], dead: false,
@@ -33,10 +35,8 @@ function pointer(e) {
 function update(dt) {
   if (state.dead) return;
   let mx = 0; let my = 0;
-  if (touchGoal) {
-    mx = touchGoal.x - state.x;
-    my = touchGoal.y - state.y;
-    if (Math.hypot(mx, my) < 10) { mx = 0; my = 0; }
+  if (stick && Math.hypot(stick.dx, stick.dy) > 14) {
+    mx = stick.dx; my = stick.dy;
   } else {
     if (pressed("KeyW", "ArrowUp")) my -= 1;
     if (pressed("KeyS", "ArrowDown")) my += 1;
@@ -95,18 +95,28 @@ function render() {
 }
 canvas.addEventListener("pointermove", (e) => {
   pointer(e);
+  if (!stick) return;
   if (e.pointerType === "mouse" && e.buttons === 0) return;
-  if (touchGoal || mouse.down) touchGoal = { x: mouse.x, y: mouse.y };
+  stick.dx = e.clientX - stickOx;
+  stick.dy = e.clientY - stickOy;
 });
 canvas.addEventListener("pointerdown", (e) => {
   pointer(e);
-  mouse.down = true;
-  touchGoal = { x: mouse.x, y: mouse.y };
+  const r = canvas.getBoundingClientRect();
+  const rx = e.clientX - r.left;
+  // 右側點射；左側／中間拖曳移動
+  if (rx > r.width * 0.58) {
+    mouse.down = true;
+  } else {
+    stickOx = e.clientX;
+    stickOy = e.clientY;
+    stick = { dx: 0, dy: 0 };
+  }
   try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
 });
-canvas.addEventListener("pointerup", () => { mouse.down = false; touchGoal = null; });
-canvas.addEventListener("pointercancel", () => { mouse.down = false; touchGoal = null; });
-window.addEventListener("pointerup", () => { mouse.down = false; touchGoal = null; });
+canvas.addEventListener("pointerup", () => { mouse.down = false; stick = null; });
+canvas.addEventListener("pointercancel", () => { mouse.down = false; stick = null; });
+window.addEventListener("pointerup", () => { mouse.down = false; stick = null; });
 window.addEventListener("keydown", (e) => { KEYS.add(e.code); if (e.code.startsWith("Arrow")) e.preventDefault(); });
 window.addEventListener("keyup", (e) => KEYS.delete(e.code));
 document.getElementById("btn-restart").onclick = reset;

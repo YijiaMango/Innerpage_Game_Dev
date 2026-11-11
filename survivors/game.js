@@ -19,14 +19,10 @@ function pressed(...codes) {
   if (window.Pad && window.Pad.pressed) return window.Pad.pressed(...codes);
   return codes.some((c) => KEYS.has(c));
 }
-let touchGoal = null;
-function canvasPos(e) {
-  const r = canvas.getBoundingClientRect();
-  return {
-    x: ((e.clientX - r.left) / r.width) * canvas.width,
-    y: ((e.clientY - r.top) / r.height) * canvas.height,
-  };
-}
+/** 相對拖曳搖桿：按住起點，往哪拖就往哪走（不是點地圖座標） */
+let stick = null; // { dx, dy } | null
+let stickOx = 0;
+let stickOy = 0;
 
 const UPGRADES = [
   { id: "dmg", label: "傷害 +4", apply: (s) => (s.damage += 4) },
@@ -178,13 +174,9 @@ function update(dt) {
 
   let mx = 0;
   let my = 0;
-  if (touchGoal) {
-    mx = touchGoal.x - state.x;
-    my = touchGoal.y - state.y;
-    if (Math.hypot(mx, my) < 8) {
-      mx = 0;
-      my = 0;
-    }
+  if (stick && Math.hypot(stick.dx, stick.dy) > 14) {
+    mx = stick.dx;
+    my = stick.dy;
   } else {
     if (pressed("KeyW", "ArrowUp")) my -= 1;
     if (pressed("KeyS", "ArrowDown")) my += 1;
@@ -334,20 +326,24 @@ window.addEventListener("keydown", (e) => {
 });
 window.addEventListener("keyup", (e) => KEYS.delete(e.code));
 canvas.addEventListener("pointerdown", (e) => {
-  touchGoal = canvasPos(e);
+  stickOx = e.clientX;
+  stickOy = e.clientY;
+  stick = { dx: 0, dy: 0 };
   try {
     canvas.setPointerCapture(e.pointerId);
   } catch (_) {}
 });
 canvas.addEventListener("pointermove", (e) => {
+  if (!stick) return;
   if (e.pointerType === "mouse" && e.buttons === 0) return;
-  if (touchGoal) touchGoal = canvasPos(e);
+  stick.dx = e.clientX - stickOx;
+  stick.dy = e.clientY - stickOy;
 });
 canvas.addEventListener("pointerup", () => {
-  touchGoal = null;
+  stick = null;
 });
 canvas.addEventListener("pointercancel", () => {
-  touchGoal = null;
+  stick = null;
 });
 el.btnRestart.addEventListener("click", reset);
 
