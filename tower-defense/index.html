@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>最小塔防 · Tower Defense</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="hud">
+        <div class="brand">MIN TD</div>
+        <div class="stat">金幣 <b id="gold">100</b></div>
+        <div class="stat">生命 <b id="lives">20</b></div>
+        <div class="stat">波次 <b id="wave">0</b> / <span id="wave-max">10</span></div>
+        <div class="stat muted" id="hint">點空地建塔 · $40</div>
+      </header>
+
+      <canvas id="game" width="960" height="540" aria-label="塔防畫布"></canvas>
+
+      <footer class="bar">
+        <button type="button" id="btn-wave" class="primary">開始波次</button>
+        <button type="button" id="btn-sell" disabled>賣掉選中塔（半價）</button>
+        <button type="button" id="btn-restart">重來</button>
+        <span id="status" class="status">放幾座塔，再按開始波次</span>
+      </footer>
+    </div>
+    <script src="./game.js"></script>
+  </body>
+</html>
