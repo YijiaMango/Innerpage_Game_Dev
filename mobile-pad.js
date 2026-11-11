@@ -12,7 +12,16 @@
 
   const { down, up, pulse } = window.Pad;
   document.body.classList.add("has-touch-controls");
-  document.body.classList.remove("has-mobile-pad", "pad-tall", "pad-lanes");
+
+  // 清掉任何殘留／快取舊版畫出來的虛擬方向鍵
+  function killPadUI() {
+    document.querySelectorAll("#mobile-pad, .dpad, .pad-btn, .pad-actions").forEach((n) => n.remove());
+    document.body.classList.remove("has-mobile-pad", "pad-tall", "pad-lanes");
+  }
+  killPadUI();
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", killPadUI);
+  else killPadUI();
+
 
   function canvasEl() {
     return document.getElementById("game");
