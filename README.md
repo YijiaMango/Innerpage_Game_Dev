@@ -5,7 +5,6 @@
 <p align="center"><strong>Innerpage_Game_Dev</strong> — 遊戲模板實驗場</p>
 
 <p align="center">
-  <strong>Hub</strong><br />
   <a href="https://yijiamango.github.io/Innerpage_Game_Dev/">https://yijiamango.github.io/Innerpage_Game_Dev/</a>
 </p>
 
