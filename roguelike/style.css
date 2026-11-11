@@ -10,7 +10,6 @@
   --danger: #e4572e;
   --canvas-w: 720;
   --canvas-h: 720;
-  --chrome: 12.5rem;
 }
 
 * {
@@ -20,8 +19,10 @@
 html,
 body {
   margin: 0;
-  min-height: 100%;
-  min-height: 100dvh;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  overflow: hidden;
   background:
     radial-gradient(ellipse 70% 50% at 50% -10%, #2a4036 0%, transparent 55%),
     linear-gradient(180deg, var(--bg1), var(--bg0));
@@ -39,14 +40,15 @@ body {
 
 #app {
   width: 100%;
-  max-width: min(980px, 100%);
-  min-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+  max-width: min(1100px, 100%);
+  height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+  max-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
   margin: 0 auto;
-  padding: 12px;
+  padding: 8px;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
-  gap: 10px;
-  align-content: start;
+  gap: 8px;
+  overflow: hidden;
   position: relative;
 }
 
@@ -55,11 +57,12 @@ body {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px 12px;
-  padding: 10px 12px;
+  gap: 6px 10px;
+  padding: 8px 10px;
   background: color-mix(in srgb, var(--panel) 88%, black);
   border: 1px solid var(--line);
   border-radius: 10px;
+  min-width: 0;
 }
 
 .brand {
@@ -76,27 +79,27 @@ body {
 .stat.muted,
 .status {
   color: var(--muted);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
 }
 
 .stage {
-  display: grid;
-  place-items: center;
+  container-type: size;
+  width: 100%;
   min-width: 0;
   min-height: 0;
-  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
 }
 
 #game {
   display: block;
-  width: auto;
+  aspect-ratio: var(--canvas-w) / var(--canvas-h);
+  width: min(100cqw, calc(100cqh * var(--canvas-w) / var(--canvas-h)));
   height: auto;
   max-width: 100%;
-  max-height: calc(
-    100dvh - var(--chrome) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)
-  );
-  aspect-ratio: var(--canvas-w) / var(--canvas-h);
-  margin-inline: auto;
+  max-height: 100%;
   border-radius: 12px;
   border: 1px solid var(--line);
   background: #121a17;
@@ -109,7 +112,7 @@ button {
   background: var(--panel);
   color: var(--text);
   border-radius: 8px;
-  padding: 8px 14px;
+  padding: 8px 12px;
   font: inherit;
   font-weight: 700;
   cursor: pointer;
@@ -135,23 +138,14 @@ button:disabled {
 
 @media (max-width: 640px) {
   #app {
-    padding: 8px;
-    gap: 8px;
+    padding: 6px;
+    gap: 6px;
   }
 
-  .hud,
-  .bar {
-    padding: 8px 10px;
-    gap: 6px 10px;
-  }
-
-  .stat.muted {
-    width: 100%;
-  }
-
+  .stat.muted,
   .status {
-    margin-left: 0;
     width: 100%;
+    margin-left: 0;
   }
 
   button {
