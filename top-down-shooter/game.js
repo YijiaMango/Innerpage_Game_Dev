@@ -9,15 +9,15 @@ function pressed(...codes) {
   return codes.some((c) => KEYS.has(c));
 }
 
-let mouse = { x: 480, y: 270, down: false };
+let mouse = { x: 270, y: 480, down: false };
 let touchGoal = null;
 
 const state = {
-  x: 480, y: 270, hp: 100, kills: 0, fireCd: 0, spawnT: 0, bullets: [], enemies: [], dead: false,
+  x: 270, y: 480, hp: 100, kills: 0, fireCd: 0, spawnT: 0, bullets: [], enemies: [], dead: false,
 };
 
 function reset() {
-  Object.assign(state, { x: 480, y: 270, hp: 100, kills: 0, fireCd: 0, spawnT: 0, bullets: [], enemies: [], dead: false });
+  Object.assign(state, { x: 270, y: 480, hp: 100, kills: 0, fireCd: 0, spawnT: 0, bullets: [], enemies: [], dead: false });
   sync("開打");
 }
 function sync(msg) {

@@ -10,8 +10,8 @@ const el = {
   btnRestart: document.getElementById("btn-restart"),
 };
 
-const W = 36;
-const H = 36;
+const W = 27;
+const H = 48;
 const TILE = 20;
 const WALL = 1;
 const FLOOR = 0;

@@ -8,8 +8,8 @@
   --accent: #d4a017;
   --accent-2: #3cb371;
   --danger: #e4572e;
-  --canvas-w: 720;
-  --canvas-h: 720;
+  --canvas-w: 540;
+  --canvas-h: 960;
 }
 
 * {

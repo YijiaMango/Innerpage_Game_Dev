@@ -9,14 +9,14 @@ function pressed(...codes) {
   return codes.some((c) => KEYS.has(c));
 }
 
-const COLS = 10; const ROWS = 5; const BW = 64; const BH = 22;
+const COLS = 8; const ROWS = 6; const BW = 58; const BH = 24; const PADDLE_Y = 900;
 
 const state = {
-  px: 310, pw: 100, ball: null, bricks: [], score: 0, lives: 3, running: false, won: false,
+  px: 220, pw: 100, ball: null, bricks: [], score: 0, lives: 3, running: false, won: false,
 };
 
 function resetBall() {
-  state.ball = { x: state.px + state.pw / 2, y: 430, vx: 180, vy: -260, r: 7 };
+  state.ball = { x: state.px + state.pw / 2, y: PADDLE_Y - 16, vx: 180, vy: -320, r: 7 };
   state.running = false;
 }
 function buildBricks() {
@@ -24,12 +24,12 @@ function buildBricks() {
   const colors = ["#c45c48", "#d4a017", "#3cb371", "#6ec8ff", "#b388ff"];
   for (let r = 0; r < ROWS; r++) {
     for (let c = 0; c < COLS; c++) {
-      state.bricks.push({ x: 30 + c * (BW + 6), y: 40 + r * (BH + 6), w: BW, h: BH, hp: 1, color: colors[r] });
+      state.bricks.push({ x: 20 + c * (BW + 6), y: 60 + r * (BH + 8), w: BW, h: BH, hp: 1, color: colors[r % colors.length] });
     }
   }
 }
 function reset() {
-  state.score = 0; state.lives = 3; state.won = false; state.px = 310;
+  state.score = 0; state.lives = 3; state.won = false; state.px = 220;
   buildBricks(); resetBall(); sync("Space 發球");
 }
 function sync(msg) {
@@ -45,7 +45,7 @@ function update(dt) {
   state.px = Math.max(0, Math.min(canvas.width - state.pw, state.px + dx * 420 * dt));
   if (!state.running) {
     state.ball.x = state.px + state.pw / 2;
-    state.ball.y = 430;
+    state.ball.y = PADDLE_Y - 16;
     return;
   }
   const b = state.ball;
@@ -59,7 +59,7 @@ function update(dt) {
     else { resetBall(); sync("再發一球"); }
     return;
   }
-  if (b.y + b.r >= 440 && b.y < 455 && b.x > state.px && b.x < state.px + state.pw && b.vy > 0) {
+  if (b.y + b.r >= PADDLE_Y && b.y < PADDLE_Y + 16 && b.x > state.px && b.x < state.px + state.pw && b.vy > 0) {
     b.vy *= -1;
     b.vx = ((b.x - (state.px + state.pw / 2)) / (state.pw / 2)) * 260;
     if (window.Feel) Feel.shake(3, 60);
@@ -79,7 +79,7 @@ function render() {
     if (br.hp <= 0) continue;
     ctx.fillStyle = br.color; ctx.fillRect(br.x, br.y, br.w, br.h);
   }
-  ctx.fillStyle = "#3cb371"; ctx.fillRect(state.px, 440, state.pw, 12);
+  ctx.fillStyle = "#3cb371"; ctx.fillRect(state.px, PADDLE_Y, state.pw, 12);
   ctx.fillStyle = "#e7f0ea";
   ctx.beginPath(); ctx.arc(state.ball.x, state.ball.y, state.ball.r, 0, Math.PI * 2); ctx.fill();
   if (state.won || state.lives <= 0) {

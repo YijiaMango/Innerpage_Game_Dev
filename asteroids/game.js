@@ -11,7 +11,7 @@ function pressed(...codes) {
 
 
 const state = {
-  x: 450, y: 270, ang: -Math.PI / 2, vx: 0, vy: 0, fireCd: 0,
+  x: 270, y: 480, ang: -Math.PI / 2, vx: 0, vy: 0, fireCd: 0,
   bullets: [], rocks: [], score: 0, lives: 3, inv: 0, dead: false,
 };
 
@@ -22,7 +22,7 @@ function spawnRock(x, y, r) {
 }
 function reset() {
   Object.assign(state, {
-    x: 450, y: 270, ang: -Math.PI / 2, vx: 0, vy: 0, fireCd: 0,
+    x: 270, y: 480, ang: -Math.PI / 2, vx: 0, vy: 0, fireCd: 0,
     bullets: [], rocks: [], score: 0, lives: 3, inv: 0, dead: false,
   });
   for (let i = 0; i < 5; i++) spawnRock(Math.random() * canvas.width, Math.random() * canvas.height, 40);

@@ -5,7 +5,7 @@ const ctx = canvas.getContext("2d");
 const el = { score: document.getElementById("score"), combo: document.getElementById("combo"), status: document.getElementById("status") };
 const LANES = 4;
 const KEYMAP = { KeyD: 0, KeyF: 1, KeyJ: 2, KeyK: 3 };
-const HIT_Y = 560;
+const HIT_Y = 860;
 
 const state = { notes: [], score: 0, combo: 0, t: 0, spawnI: 0, chart: [], over: false };
 

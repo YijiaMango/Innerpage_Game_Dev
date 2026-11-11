@@ -1,6 +1,8 @@
-/** 最小 Snake */
+/** 最小 Snake — 直式 18×32 */
 
-const N = 20; const TILE = 30;
+const COLS = 18;
+const ROWS = 32;
+const TILE = 30;
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 const el = { len: document.getElementById("len"), status: document.getElementById("status") };
@@ -8,14 +10,14 @@ const el = { len: document.getElementById("len"), status: document.getElementByI
 let snake, dir, nextDir, food, dead, acc;
 
 function reset() {
-  snake = [{ x: 10, y: 10 }, { x: 9, y: 10 }, { x: 8, y: 10 }];
+  snake = [{ x: 9, y: 16 }, { x: 8, y: 16 }, { x: 7, y: 16 }];
   dir = { x: 1, y: 0 }; nextDir = { ...dir };
   placeFood(); dead = false; acc = 0;
   sync("開始移動");
 }
 function placeFood() {
   do {
-    food = { x: Math.floor(Math.random() * N), y: Math.floor(Math.random() * N) };
+    food = { x: Math.floor(Math.random() * COLS), y: Math.floor(Math.random() * ROWS) };
   } while (snake.some((s) => s.x === food.x && s.y === food.y));
 }
 function sync(msg) {
@@ -26,19 +28,24 @@ function step() {
   if (dead) return;
   dir = nextDir;
   const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
-  if (head.x < 0 || head.y < 0 || head.x >= N || head.y >= N || snake.some((s) => s.x === head.x && s.y === head.y)) {
+  if (head.x < 0 || head.y < 0 || head.x >= COLS || head.y >= ROWS || snake.some((s) => s.x === head.x && s.y === head.y)) {
     dead = true; sync("撞死了"); if (window.Feel) Feel.hurt(); return;
   }
   snake.unshift(head);
-  if (head.x === food.x && head.y === food.y) { placeFood(); sync(`長度 ${snake.length}`); if (window.Feel) Feel.score(canvas, head.x * TILE + 15, head.y * TILE + 15); }
-  else snake.pop();
+  if (head.x === food.x && head.y === food.y) {
+    placeFood();
+    sync(`長度 ${snake.length}`);
+    if (window.Feel) Feel.score(canvas, head.x * TILE + 15, head.y * TILE + 15);
+  } else snake.pop();
   sync(null);
 }
 function render() {
   ctx.fillStyle = "#121a17"; ctx.fillRect(0, 0, canvas.width, canvas.height);
-  for (let i = 0; i <= N; i++) {
-    ctx.strokeStyle = "rgba(70,95,82,0.25)";
+  ctx.strokeStyle = "rgba(70,95,82,0.25)";
+  for (let i = 0; i <= COLS; i++) {
     ctx.beginPath(); ctx.moveTo(i * TILE, 0); ctx.lineTo(i * TILE, canvas.height); ctx.stroke();
+  }
+  for (let i = 0; i <= ROWS; i++) {
     ctx.beginPath(); ctx.moveTo(0, i * TILE); ctx.lineTo(canvas.width, i * TILE); ctx.stroke();
   }
   ctx.fillStyle = "#d4a017";

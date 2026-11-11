@@ -11,12 +11,12 @@ function pressed(...codes) {
 
 
 const state = {
-  x: 240, y: 640, hp: 5, score: 0, fireCd: 0, spawnT: 0, elapsed: 0,
+  x: 270, y: 860, hp: 5, score: 0, fireCd: 0, spawnT: 0, elapsed: 0,
   bullets: [], enemies: [], eBullets: [], dead: false,
 };
 
 function reset() {
-  Object.assign(state, { x: 240, y: 640, hp: 5, score: 0, fireCd: 0, spawnT: 0, elapsed: 0, bullets: [], enemies: [], eBullets: [], dead: false });
+  Object.assign(state, { x: 270, y: 860, hp: 5, score: 0, fireCd: 0, spawnT: 0, elapsed: 0, bullets: [], enemies: [], eBullets: [], dead: false });
   sync("開戰");
 }
 function sync(msg) {

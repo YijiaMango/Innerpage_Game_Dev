@@ -1,6 +1,8 @@
 /** 最小 Falling Blocks（Tetris-like） */
 
-const COLS = 10; const ROWS = 20; const TILE = 30;
+const COLS = 10; const ROWS = 20; const TILE = 36;
+const OX = (540 - COLS * TILE) / 2;
+const OY = (960 - ROWS * TILE) / 2;
 const SHAPES = {
   I: [[1, 1, 1, 1]],
   O: [[1, 1], [1, 1]],
@@ -88,7 +90,7 @@ function update(dt) {
   sync(null);
 }
 function drawCell(x, y, color) {
-  ctx.fillStyle = color; ctx.fillRect(x * TILE + 1, y * TILE + 1, TILE - 2, TILE - 2);
+  ctx.fillStyle = color; ctx.fillRect(OX + x * TILE + 1, OY + y * TILE + 1, TILE - 2, TILE - 2);
 }
 function render() {
   ctx.fillStyle = "#0e1512"; ctx.fillRect(0, 0, canvas.width, canvas.height);

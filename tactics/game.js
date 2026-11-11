@@ -1,6 +1,6 @@
 /** 最小 Tactics — 格子移動、相鄰攻擊、敵方簡單 AI */
 
-const COLS = 8; const ROWS = 6; const TILE = 80;
+const COLS = 6; const ROWS = 10; const TILE = 90;
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 const el = { turn: document.getElementById("turn"), status: document.getElementById("status") };
@@ -9,11 +9,11 @@ let units, selected, side, over;
 
 function reset() {
   units = [
-    { id: "p1", side: "you", x: 1, y: 2, hp: 20, atk: 7, moved: false },
-    { id: "p2", side: "you", x: 1, y: 4, hp: 20, atk: 7, moved: false },
-    { id: "e1", side: "enemy", x: 6, y: 1, hp: 16, atk: 5, moved: false },
-    { id: "e2", side: "enemy", x: 6, y: 3, hp: 16, atk: 5, moved: false },
-    { id: "e3", side: "enemy", x: 5, y: 4, hp: 16, atk: 5, moved: false },
+    { id: "p1", side: "you", x: 1, y: 7, hp: 20, atk: 7, moved: false },
+    { id: "p2", side: "you", x: 2, y: 8, hp: 20, atk: 7, moved: false },
+    { id: "e1", side: "enemy", x: 3, y: 1, hp: 16, atk: 5, moved: false },
+    { id: "e2", side: "enemy", x: 4, y: 2, hp: 16, atk: 5, moved: false },
+    { id: "e3", side: "enemy", x: 2, y: 2, hp: 16, atk: 5, moved: false },
   ];
   selected = null; side = "you"; over = false;
   sync("你的回合");

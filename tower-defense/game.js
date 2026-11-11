@@ -1,7 +1,7 @@
 /** 最小可運行 Tower Defense — 純 Canvas，無依賴 */
 
-const COLS = 16;
-const ROWS = 9;
+const COLS = 9;
+const ROWS = 16;
 const TILE = 60;
 const TOWER_COST = 40;
 const MAX_WAVES = 10;
@@ -10,16 +10,17 @@ const START_LIVES = 20;
 
 /** 路徑：格子座標 (c,r)，敵人依序走 */
 const PATH = [
-  [0, 4],
-  [3, 4],
-  [3, 1],
-  [7, 1],
+  [4, 0],
+  [4, 3],
+  [1, 3],
+  [1, 6],
   [7, 6],
-  [11, 6],
-  [11, 2],
-  [14, 2],
-  [14, 7],
-  [15, 7],
+  [7, 9],
+  [2, 9],
+  [2, 12],
+  [6, 12],
+  [6, 15],
+  [8, 15],
 ];
 
 const canvas = document.getElementById("game");

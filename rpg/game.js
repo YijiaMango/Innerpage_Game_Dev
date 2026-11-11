@@ -27,13 +27,13 @@ function canvasTile(e) {
 }
 
 const TILE = 40;
-const MAP_W = 24;
-const MAP_H = 13;
+const MAP_W = 13;
+const MAP_H = 24;
 
 const NPCS = [
-  { id: "villager", x: 6, y: 6, color: "#d4a017", kind: "talk", name: "村民" },
-  { id: "slime", x: 16, y: 8, color: "#6ec8ff", kind: "battle", name: "史萊姆", hp: 18, atk: 4, reward: 8 },
-  { id: "slime2", x: 19, y: 4, color: "#6ec8ff", kind: "battle", name: "史萊姆", hp: 18, atk: 4, gold: 8 },
+  { id: "villager", x: 6, y: 8, color: "#d4a017", kind: "talk", name: "村民" },
+  { id: "slime", x: 9, y: 14, color: "#6ec8ff", kind: "battle", name: "史萊姆", hp: 18, atk: 4, reward: 8 },
+  { id: "slime2", x: 4, y: 18, color: "#6ec8ff", kind: "battle", name: "史萊姆", hp: 18, atk: 4, gold: 8 },
 ];
 
 const state = {

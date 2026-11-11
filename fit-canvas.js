@@ -1,4 +1,4 @@
-/** 手機優先：直向視窗先塞滿高度，再等比縮放不變形 */
+/** 直式畫布 9:16：塞滿 stage，等比 contain、不變形 */
 (function () {
   const canvas = document.getElementById("game");
   if (!canvas) return;
@@ -10,24 +10,12 @@
     const sh = stage.clientHeight;
     if (sw < 2 || sh < 2) return;
     const ar = (canvas.width || 1) / (canvas.height || 1);
-    const portraitUI = window.innerHeight >= window.innerWidth;
-    let w;
-    let h;
-    if (portraitUI) {
-      // 手機：優先吃滿可用高度
-      h = sh;
-      w = h * ar;
-      if (w > sw) {
-        w = sw;
-        h = w / ar;
-      }
-    } else {
+    // 直式優先：先撐滿高度
+    let h = sh;
+    let w = h * ar;
+    if (w > sw) {
       w = sw;
       h = w / ar;
-      if (h > sh) {
-        h = sh;
-        w = h * ar;
-      }
     }
     canvas.style.width = Math.floor(w) + "px";
     canvas.style.height = Math.floor(h) + "px";

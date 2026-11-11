@@ -1,6 +1,6 @@
 /** 最小 Merge — 點格子放下，同階相鄰合成升級 */
 
-const N = 5; const TILE = 96;
+const N = 5; const TILE = 108;
 const COLORS = ["#3cb371", "#6ec8ff", "#d4a017", "#b388ff", "#c45c48", "#e7f0ea", "#8fd694", "#f0a090"];
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");

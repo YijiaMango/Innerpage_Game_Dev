@@ -90,7 +90,7 @@ body {
 .tap {
   width: min(160px, 42vw);
   height: min(160px, 42vw);
-  aspect-ratio: 1;
+  aspect-ratio: 540 / 960;
   border-radius: 50%;
   border: 3px solid #4aa572;
   background: radial-gradient(circle at 35% 30%, #5ecf8a, #2f6b49 70%);

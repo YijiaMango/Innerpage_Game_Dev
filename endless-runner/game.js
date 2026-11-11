@@ -3,7 +3,7 @@
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 const el = { dist: document.getElementById("dist"), status: document.getElementById("status") };
-const GROUND = 300;
+const GROUND = 820;
 
 const state = {
   y: GROUND - 40, vy: 0, onGround: true, speed: 260, dist: 0, spawnT: 0, obstacles: [], dead: false,
