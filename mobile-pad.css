@@ -1,26 +1,2 @@
-/* 無虛擬方向鍵；僅保留觸控手勢所需的全域設定 */
-.has-touch-controls,
-.has-touch-controls #game {
-  touch-action: none;
-  -webkit-user-select: none;
-  user-select: none;
-}
-
-.has-touch-controls #app {
-  /* 不再為螢幕方向鍵預留下方空間 */
-  padding-bottom: max(8px, env(safe-area-inset-bottom, 0px));
-}
-
-/* 隱藏舊版方向鍵殘留（若快取） */
-#mobile-pad {
-  display: none !important;
-}
-
-#mobile-pad, .dpad, .pad-btn, .pad-actions, .pad-fire, .pad-jump {
-  display: none !important;
-  pointer-events: none !important;
-  visibility: hidden !important;
-  width: 0 !important;
-  height: 0 !important;
-  opacity: 0 !important;
-}
+/* @deprecated → controls.css */
+@import url("./controls.css");

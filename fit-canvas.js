@@ -1,4 +1,4 @@
-/** 直式畫布 9:16：塞滿 stage，等比 contain、不變形 */
+/** 系統層畫布適配（根目錄）— 直式 9:16 contain，各遊戲勿自寫 fit */
 (function () {
   const canvas = document.getElementById("game");
   if (!canvas) return;

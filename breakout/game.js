@@ -3,10 +3,8 @@
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 const el = { score: document.getElementById("score"), lives: document.getElementById("lives"), status: document.getElementById("status") };
-const KEYS = new Set();
 function pressed(...codes) {
-  if (window.Pad && window.Pad.pressed) return window.Pad.pressed(...codes);
-  return codes.some((c) => KEYS.has(c));
+  return window.Controls ? Controls.pressed(...codes) : false;
 }
 
 const COLS = 8; const ROWS = 6; const BW = 58; const BH = 24; const PADDLE_Y = 900;
@@ -91,11 +89,9 @@ function render() {
   }
 }
 window.addEventListener("keydown", (e) => {
-  KEYS.add(e.code);
   if (e.code === "Space") { e.preventDefault(); if (!state.running && state.lives > 0 && !state.won) state.running = true; }
   if (e.code.startsWith("Arrow")) e.preventDefault();
 });
-window.addEventListener("keyup", (e) => KEYS.delete(e.code));
 canvas.addEventListener("pointerdown", (e) => {
   const rect = canvas.getBoundingClientRect();
   const x = ((e.clientX - rect.left) / rect.width) * canvas.width;

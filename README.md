@@ -8,6 +8,14 @@
   <a href="https://yijiamango.github.io/Innerpage_Game_Dev/">https://yijiamango.github.io/Innerpage_Game_Dev/</a>
 </p>
 
+## 系統層（根目錄，勿散落到各遊戲）
+
+| 檔案 | 職責 |
+|---|---|
+| `controls.js` / `controls.css` | 輸入：鍵盤 + 相對拖曳搖桿 + `data-pad` 手勢；遊戲只讀 `Controls.axis()` / `pressed()` |
+| `feel.js` | 手感／粒子／震動 |
+| `fit-canvas.js` | 直式畫布等比適配 |
+
 ## 最小模板
 
 | 類型 | 說明 | 路徑 |

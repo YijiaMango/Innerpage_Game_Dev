@@ -8,16 +8,13 @@ const el = {
   btnRestart: document.getElementById("btn-restart"),
 };
 
-const KEYS = new Set();
 function pressed(...codes) {
-  if (window.Pad && window.Pad.pressed) return window.Pad.pressed(...codes);
-  return codes.some((c) => KEYS.has(c));
+  return window.Controls
+    ? Controls.pressed(...codes)
+    : codes.some((c) => false);
 }
-let touchX = null;
-let jumpTap = false;
-function canvasX(e) {
-  const r = canvas.getBoundingClientRect();
-  return ((e.clientX - r.left) / r.width) * canvas.width;
+function axis() {
+  return window.Controls ? Controls.axis() : { x: 0, y: 0 };
 }
 
 const GRAVITY = 1800;
@@ -87,23 +84,12 @@ function aabb(ax, ay, aw, ah, bx, by, bw, bh) {
 function update(dt) {
   if (state.won || state.dead) return;
 
-  let ax = 0;
-  if (touchX != null) {
-    const dx = touchX - (state.x + state.w / 2);
-    if (dx < -12) ax = -1;
-    else if (dx > 12) ax = 1;
-  } else {
-    if (pressed("ArrowLeft", "KeyA")) ax -= 1;
-    if (pressed("ArrowRight", "KeyD")) ax += 1;
-  }
-  state.vx = ax * MOVE;
-  if ((jumpTap || pressed("Space", "ArrowUp", "KeyW")) && state.onGround) {
+  const a = axis();
+  state.vx = a.x * MOVE;
+  if (pressed("Space", "ArrowUp", "KeyW") && state.onGround) {
     state.vy = -JUMP;
     state.onGround = false;
-    jumpTap = false;
     if (window.Feel) Feel.shake(2, 40);
-  } else {
-    jumpTap = false;
   }
 
   state.vy += GRAVITY * dt;
@@ -197,29 +183,8 @@ function render() {
 }
 
 window.addEventListener("keydown", (e) => {
-  KEYS.add(e.code);
   if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Space"].includes(e.code)) e.preventDefault();
 });
-window.addEventListener("keyup", (e) => KEYS.delete(e.code));
-let touchOx = 0;
-let touchMoved = false;
-canvas.addEventListener("pointerdown", (e) => {
-  touchX = canvasX(e);
-  touchOx = e.clientX;
-  touchMoved = false;
-  try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
-});
-canvas.addEventListener("pointermove", (e) => {
-  if (e.pointerType === "mouse" && e.buttons === 0) return;
-  if (touchX == null) return;
-  if (Math.abs(e.clientX - touchOx) > 12) touchMoved = true;
-  touchX = canvasX(e);
-});
-canvas.addEventListener("pointerup", () => {
-  if (touchX != null && !touchMoved) jumpTap = true;
-  touchX = null;
-});
-canvas.addEventListener("pointercancel", () => { touchX = null; });
 el.btnRestart.addEventListener("click", reset);
 
 let last = performance.now();

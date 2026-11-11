@@ -3,10 +3,8 @@
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 const el = { score: document.getElementById("score"), lives: document.getElementById("lives"), status: document.getElementById("status") };
-const KEYS = new Set();
 function pressed(...codes) {
-  if (window.Pad && window.Pad.pressed) return window.Pad.pressed(...codes);
-  return codes.some((c) => KEYS.has(c));
+  return window.Controls ? Controls.pressed(...codes) : false;
 }
 
 
@@ -112,8 +110,7 @@ function render() {
     ctx.fillText("DESTROYED", canvas.width / 2, canvas.height / 2); ctx.textAlign = "start";
   }
 }
-window.addEventListener("keydown", (e) => { KEYS.add(e.code); if (e.code === "Space" || e.code.startsWith("Arrow")) e.preventDefault(); });
-window.addEventListener("keyup", (e) => KEYS.delete(e.code));
+window.addEventListener("keydown", (e) => { if (e.code === "Space" || e.code.startsWith("Arrow")) e.preventDefault(); });
 document.getElementById("btn-restart").onclick = reset;
 let last = performance.now();
 function frame(now) { const dt = Math.min(0.05, (now - last) / 1000); last = now; update(dt); render(); requestAnimationFrame(frame); }

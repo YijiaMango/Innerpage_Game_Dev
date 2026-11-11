@@ -14,15 +14,14 @@ const el = {
   btnRestart: document.getElementById("btn-restart"),
 };
 
-const KEYS = new Set();
 function pressed(...codes) {
-  if (window.Pad && window.Pad.pressed) return window.Pad.pressed(...codes);
-  return codes.some((c) => KEYS.has(c));
+  return window.Controls
+    ? Controls.pressed(...codes)
+    : codes.some((c) => false);
 }
-/** 相對拖曳搖桿：按住起點，往哪拖就往哪走（不是點地圖座標） */
-let stick = null; // { dx, dy } | null
-let stickOx = 0;
-let stickOy = 0;
+function axis() {
+  return window.Controls ? Controls.axis() : { x: 0, y: 0 };
+}
 
 const UPGRADES = [
   { id: "dmg", label: "傷害 +4", apply: (s) => (s.damage += 4) },
@@ -172,17 +171,9 @@ function update(dt) {
   if (state.paused || state.dead) return;
   state.elapsed += dt;
 
-  let mx = 0;
-  let my = 0;
-  if (stick && Math.hypot(stick.dx, stick.dy) > 14) {
-    mx = stick.dx;
-    my = stick.dy;
-  } else {
-    if (pressed("KeyW", "ArrowUp")) my -= 1;
-    if (pressed("KeyS", "ArrowDown")) my += 1;
-    if (pressed("KeyA", "ArrowLeft")) mx -= 1;
-    if (pressed("KeyD", "ArrowRight")) mx += 1;
-  }
+  const a = axis();
+  let mx = a.x;
+  let my = a.y;
   if (mx || my) {
     const len = Math.hypot(mx, my) || 1;
     state.x = Math.max(16, Math.min(canvas.width - 16, state.x + (mx / len) * state.speed * dt));
@@ -321,29 +312,7 @@ function render() {
 }
 
 window.addEventListener("keydown", (e) => {
-  KEYS.add(e.code);
   if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Space"].includes(e.code)) e.preventDefault();
-});
-window.addEventListener("keyup", (e) => KEYS.delete(e.code));
-canvas.addEventListener("pointerdown", (e) => {
-  stickOx = e.clientX;
-  stickOy = e.clientY;
-  stick = { dx: 0, dy: 0 };
-  try {
-    canvas.setPointerCapture(e.pointerId);
-  } catch (_) {}
-});
-canvas.addEventListener("pointermove", (e) => {
-  if (!stick) return;
-  if (e.pointerType === "mouse" && e.buttons === 0) return;
-  stick.dx = e.clientX - stickOx;
-  stick.dy = e.clientY - stickOy;
-});
-canvas.addEventListener("pointerup", () => {
-  stick = null;
-});
-canvas.addEventListener("pointercancel", () => {
-  stick = null;
 });
 el.btnRestart.addEventListener("click", reset);
 

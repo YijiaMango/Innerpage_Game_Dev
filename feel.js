@@ -1,4 +1,4 @@
-/** 回饋：粒子為主，晃動／閃光／震動為輔 */
+/** 系統層手感／粒子（根目錄）— 粒子為主，晃動／閃光／震動為輔；各遊戲只呼叫 Feel.* */
 (function (global) {
   const root = () => document.getElementById("app") || document.body;
   let shakeT = 0;

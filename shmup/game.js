@@ -3,10 +3,8 @@
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 const el = { score: document.getElementById("score"), hp: document.getElementById("hp"), status: document.getElementById("status") };
-const KEYS = new Set();
 function pressed(...codes) {
-  if (window.Pad && window.Pad.pressed) return window.Pad.pressed(...codes);
-  return codes.some((c) => KEYS.has(c));
+  return window.Controls ? Controls.pressed(...codes) : false;
 }
 
 
@@ -100,8 +98,7 @@ function render() {
     ctx.fillText("GAME OVER", canvas.width / 2, canvas.height / 2); ctx.textAlign = "start";
   }
 }
-window.addEventListener("keydown", (e) => { KEYS.add(e.code); if (e.code.startsWith("Arrow")) e.preventDefault(); });
-window.addEventListener("keyup", (e) => KEYS.delete(e.code));
+window.addEventListener("keydown", (e) => { if (e.code.startsWith("Arrow")) e.preventDefault(); });
 canvas.addEventListener("pointermove", (e) => {
   if (e.pointerType === "mouse" && e.buttons === 0) return;
   const rect = canvas.getBoundingClientRect();

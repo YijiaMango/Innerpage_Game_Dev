@@ -3,16 +3,15 @@
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 const el = { hp: document.getElementById("hp"), kills: document.getElementById("kills"), status: document.getElementById("status") };
-const KEYS = new Set();
 function pressed(...codes) {
-  if (window.Pad && window.Pad.pressed) return window.Pad.pressed(...codes);
-  return codes.some((c) => KEYS.has(c));
+  return window.Controls
+    ? Controls.pressed(...codes)
+    : codes.some((c) => false);
+}
+function axis() {
+  return window.Controls ? Controls.axis() : { x: 0, y: 0 };
 }
 
-let mouse = { x: 270, y: 480, down: false };
-let stick = null;
-let stickOx = 0;
-let stickOy = 0;
 
 const state = {
   x: 270, y: 480, hp: 100, kills: 0, fireCd: 0, spawnT: 0, bullets: [], enemies: [], dead: false,
@@ -27,37 +26,25 @@ function sync(msg) {
   el.kills.textContent = String(state.kills);
   if (msg != null) el.status.textContent = msg;
 }
-function pointer(e) {
-  const r = canvas.getBoundingClientRect();
-  mouse.x = ((e.clientX - r.left) * canvas.width) / r.width;
-  mouse.y = ((e.clientY - r.top) * canvas.height) / r.height;
-}
 function update(dt) {
   if (state.dead) return;
-  let mx = 0; let my = 0;
-  if (stick && Math.hypot(stick.dx, stick.dy) > 14) {
-    mx = stick.dx; my = stick.dy;
-  } else {
-    if (pressed("KeyW", "ArrowUp")) my -= 1;
-    if (pressed("KeyS", "ArrowDown")) my += 1;
-    if (pressed("KeyA", "ArrowLeft")) mx -= 1;
-    if (pressed("KeyD", "ArrowRight")) mx += 1;
-  }
+  const a = axis();
+  let mx = a.x; let my = a.y;
   if (mx || my) {
     const len = Math.hypot(mx, my) || 1;
     state.x = Math.max(16, Math.min(canvas.width - 16, state.x + (mx / len) * 200 * dt));
     state.y = Math.max(16, Math.min(canvas.height - 16, state.y + (my / len) * 200 * dt));
   }
   state.fireCd -= dt;
-  if ((mouse.down || pressed("Space")) && state.fireCd <= 0) {
-    const ang = Math.atan2(mouse.y - state.y, mouse.x - state.x);
+  if (pressed("Space") && state.fireCd <= 0) {
+    const ang = Math.atan2(Controls.pointer.y - state.y, Controls.pointer.x - state.x);
     state.bullets.push({ x: state.x, y: state.y, vx: Math.cos(ang) * 520, vy: Math.sin(ang) * 520, life: 0.9 });
     state.fireCd = 0.12;
   }
   state.spawnT -= dt;
   if (state.spawnT <= 0) {
-    const a = Math.random() * Math.PI * 2;
-    state.enemies.push({ x: state.x + Math.cos(a) * 380, y: state.y + Math.sin(a) * 260, hp: 20 });
+    const ang0 = Math.random() * Math.PI * 2;
+    state.enemies.push({ x: state.x + Math.cos(ang0) * 380, y: state.y + Math.sin(ang0) * 260, hp: 20 });
     state.spawnT = 0.7;
   }
   for (const b of state.bullets) { b.x += b.vx * dt; b.y += b.vy * dt; b.life -= dt; }
@@ -80,7 +67,7 @@ function update(dt) {
 function render() {
   ctx.fillStyle = "#15201c"; ctx.fillRect(0, 0, canvas.width, canvas.height);
   ctx.strokeStyle = "rgba(212,160,23,0.35)";
-  ctx.beginPath(); ctx.moveTo(state.x, state.y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(state.x, state.y); ctx.lineTo(Controls.pointer.x, Controls.pointer.y); ctx.stroke();
   ctx.fillStyle = "#fff3c4";
   for (const b of state.bullets) { ctx.beginPath(); ctx.arc(b.x, b.y, 3, 0, Math.PI * 2); ctx.fill(); }
   ctx.fillStyle = "#c45c48";
@@ -93,32 +80,7 @@ function render() {
     ctx.fillText("DOWN", canvas.width / 2, canvas.height / 2); ctx.textAlign = "start";
   }
 }
-canvas.addEventListener("pointermove", (e) => {
-  pointer(e);
-  if (!stick) return;
-  if (e.pointerType === "mouse" && e.buttons === 0) return;
-  stick.dx = e.clientX - stickOx;
-  stick.dy = e.clientY - stickOy;
-});
-canvas.addEventListener("pointerdown", (e) => {
-  pointer(e);
-  const r = canvas.getBoundingClientRect();
-  const rx = e.clientX - r.left;
-  // 右側點射；左側／中間拖曳移動
-  if (rx > r.width * 0.58) {
-    mouse.down = true;
-  } else {
-    stickOx = e.clientX;
-    stickOy = e.clientY;
-    stick = { dx: 0, dy: 0 };
-  }
-  try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
-});
-canvas.addEventListener("pointerup", () => { mouse.down = false; stick = null; });
-canvas.addEventListener("pointercancel", () => { mouse.down = false; stick = null; });
-window.addEventListener("pointerup", () => { mouse.down = false; stick = null; });
-window.addEventListener("keydown", (e) => { KEYS.add(e.code); if (e.code.startsWith("Arrow")) e.preventDefault(); });
-window.addEventListener("keyup", (e) => KEYS.delete(e.code));
+window.addEventListener("keydown", (e) => { if (e.code.startsWith("Arrow")) e.preventDefault(); });
 document.getElementById("btn-restart").onclick = reset;
 let last = performance.now();
 function frame(now) { const dt = Math.min(0.05, (now - last) / 1000); last = now; update(dt); render(); requestAnimationFrame(frame); }

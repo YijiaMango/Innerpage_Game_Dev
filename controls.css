@@ -1,0 +1,26 @@
+/* 系統層觸控：無虛擬方向鍵 UI */
+.has-touch-controls,
+.has-touch-controls #game {
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.has-touch-controls #app {
+  padding-bottom: max(8px, env(safe-area-inset-bottom, 0px));
+}
+
+/* 舊版殘留一律隱藏 */
+#mobile-pad,
+.dpad,
+.pad-btn,
+.pad-actions,
+.pad-fire,
+.pad-jump {
+  display: none !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+  opacity: 0 !important;
+}
