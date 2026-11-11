@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>最小 Match-3 · 三消</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="hud">
+        <div class="brand">MIN MATCH3</div>
+        <div class="stat">分數 <b id="score">0</b></div>
+        <div class="stat">步數 <b id="moves">30</b></div>
+        <div class="stat muted">點兩格相鄰交換 · 三連消除</div>
+      </header>
+      <canvas id="game" width="540" height="540" aria-label="三消畫布"></canvas>
+      <footer class="bar">
+        <button type="button" id="btn-restart" class="primary">重來</button>
+        <span id="status" class="status">消到步數用完</span>
+      </footer>
+    </div>
+    <script src="./game.js"></script>
+  </body>
+</html>

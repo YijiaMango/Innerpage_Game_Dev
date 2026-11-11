@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>最小 Breakout · 打磚塊</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="hud">
+        <div class="brand">MIN BREAKOUT</div>
+        <div class="stat">分數 <b id="score">0</b></div>
+        <div class="stat">命 <b id="lives">3</b></div>
+        <div class="stat muted">←→ 移動底板 · Space 發球</div>
+      </header>
+      <canvas id="game" width="720" height="480" aria-label="打磚塊畫布"></canvas>
+      <footer class="bar">
+        <button type="button" id="btn-restart" class="primary">重來</button>
+        <span id="status" class="status">清光磚塊</span>
+      </footer>
+    </div>
+    <script src="./game.js"></script>
+  </body>
+</html>

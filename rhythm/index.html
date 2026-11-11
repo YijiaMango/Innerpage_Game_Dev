@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>最小 Rhythm · 節奏</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="hud">
+        <div class="brand">MIN RHYTHM</div>
+        <div class="stat">分數 <b id="score">0</b></div>
+        <div class="stat">連擊 <b id="combo">0</b></div>
+        <div class="stat muted">DFJK 對應四軌道 · 對準判定線</div>
+      </header>
+      <canvas id="game" width="480" height="640" aria-label="節奏畫布"></canvas>
+      <footer class="bar">
+        <button type="button" id="btn-restart" class="primary">重來</button>
+        <span id="status" class="status">D F J K</span>
+      </footer>
+    </div>
+    <script src="./game.js"></script>
+  </body>
+</html>

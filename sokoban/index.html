@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>最小 Sokoban · 推箱子</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="hud">
+        <div class="brand">MIN SOKOBAN</div>
+        <div class="stat">關卡 <b id="level">1</b></div>
+        <div class="stat">步數 <b id="steps">0</b></div>
+        <div class="stat muted">方向鍵推箱 · 箱子推到目標點</div>
+      </header>
+      <canvas id="game" width="560" height="480" aria-label="推箱子畫布"></canvas>
+      <footer class="bar">
+        <button type="button" id="btn-restart" class="primary">重來本關</button>
+        <span id="status" class="status">把所有箱子推到 ·</span>
+      </footer>
+    </div>
+    <script src="./game.js"></script>
+  </body>
+</html>

@@ -54,5 +54,89 @@
     "description": "俯視移動、NPC 對話、回合戰鬥。",
     "version": "0.1.0",
     "path": "rpg/"
+  },
+  {
+    "id": "match3",
+    "title": "最小 Match-3",
+    "description": "相鄰交換、三連消除、重力補珠。",
+    "version": "0.1.0",
+    "path": "match3/"
+  },
+  {
+    "id": "shmup",
+    "title": "最小 Shmup",
+    "description": "縱向射擊、敵機波次與子彈。",
+    "version": "0.1.0",
+    "path": "shmup/"
+  },
+  {
+    "id": "breakout",
+    "title": "最小 Breakout",
+    "description": "底板、球、打磚塊。",
+    "version": "0.1.0",
+    "path": "breakout/"
+  },
+  {
+    "id": "snake",
+    "title": "最小 Snake",
+    "description": "貪食蛇：移動、吃點、撞牆／自撞。",
+    "version": "0.1.0",
+    "path": "snake/"
+  },
+  {
+    "id": "falling-blocks",
+    "title": "最小 Falling Blocks",
+    "description": "方塊下落、旋轉、消行（Tetris-like）。",
+    "version": "0.1.0",
+    "path": "falling-blocks/"
+  },
+  {
+    "id": "endless-runner",
+    "title": "最小 Endless Runner",
+    "description": "無盡跑酷：跳躍躲障礙。",
+    "version": "0.1.0",
+    "path": "endless-runner/"
+  },
+  {
+    "id": "sokoban",
+    "title": "最小 Sokoban",
+    "description": "推箱子解謎，多關卡。",
+    "version": "0.1.0",
+    "path": "sokoban/"
+  },
+  {
+    "id": "top-down-shooter",
+    "title": "最小 Top-down Shooter",
+    "description": "WASD + 滑鼠瞄準手動射擊。",
+    "version": "0.1.0",
+    "path": "top-down-shooter/"
+  },
+  {
+    "id": "rhythm",
+    "title": "最小 Rhythm",
+    "description": "四軌節奏、DFJK 判定。",
+    "version": "0.1.0",
+    "path": "rhythm/"
+  },
+  {
+    "id": "merge",
+    "title": "最小 Merge",
+    "description": "點格放下、同階相鄰合成。",
+    "version": "0.1.0",
+    "path": "merge/"
+  },
+  {
+    "id": "asteroids",
+    "title": "最小 Asteroids",
+    "description": "轉向推進射擊、隕石分裂。",
+    "version": "0.1.0",
+    "path": "asteroids/"
+  },
+  {
+    "id": "tactics",
+    "title": "最小 Tactics",
+    "description": "戰棋移動／攻擊、敵方簡易 AI。",
+    "version": "0.1.0",
+    "path": "tactics/"
   }
 ]

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>最小 Endless Runner · 無盡跑酷</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="hud">
+        <div class="brand">MIN RUNNER</div>
+        <div class="stat">距離 <b id="dist">0</b></div>
+        <div class="stat muted">Space／↑ 跳躍 · 躲障礙</div>
+      </header>
+      <canvas id="game" width="900" height="360" aria-label="跑酷畫布"></canvas>
+      <footer class="bar">
+        <button type="button" id="btn-restart" class="primary">重來</button>
+        <span id="status" class="status">跑越遠越好</span>
+      </footer>
+    </div>
+    <script src="./game.js"></script>
+  </body>
+</html>

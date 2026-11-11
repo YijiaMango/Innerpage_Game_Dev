@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>最小 Snake · 貪食蛇</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="hud">
+        <div class="brand">MIN SNAKE</div>
+        <div class="stat">長度 <b id="len">3</b></div>
+        <div class="stat muted">方向鍵／WASD · 吃點變長</div>
+      </header>
+      <canvas id="game" width="600" height="600" aria-label="貪食蛇畫布"></canvas>
+      <footer class="bar">
+        <button type="button" id="btn-restart" class="primary">重來</button>
+        <span id="status" class="status">別撞牆／撞自己</span>
+      </footer>
+    </div>
+    <script src="./game.js"></script>
+  </body>
+</html>
