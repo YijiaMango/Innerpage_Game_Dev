@@ -238,8 +238,8 @@ function update(dt) {
   for (const e of state.enemies) {
     if (e.hp <= 0) {
       state.kills += 1;
-      state.gems.push
-      if (window.Feel) Feel.score(canvas, e.x, e.y);({ x: e.x, y: e.y, v: 4 + Math.floor(Math.random() * 3) });
+      state.gems.push({ x: e.x, y: e.y, v: 4 + Math.floor(Math.random() * 3) });
+      if (window.Feel) Feel.score(canvas, e.x, e.y);
       e.dead = true;
     }
   }
