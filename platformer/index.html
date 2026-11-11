@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>最小 Platformer · 平台跳躍</title>
     <link rel="stylesheet" href="./style.css" />
   </head>
@@ -13,7 +13,7 @@
         <div class="stat">硬幣 <b id="coins">0</b></div>
         <div class="stat muted" id="hint">←→ 移動 · Space／↑ 跳 · 碰到旗幟通關</div>
       </header>
-      <canvas id="game" width="960" height="540" aria-label="平台遊戲畫布"></canvas>
+      <div class="stage"><canvas id="game" width="960" height="540" aria-label="平台遊戲畫布"></canvas></div>
       <footer class="bar">
         <button type="button" id="btn-restart" class="primary">重來</button>
         <span id="status" class="status">到達右側旗幟</span>

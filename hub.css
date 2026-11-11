@@ -17,6 +17,7 @@ html,
 body {
   margin: 0;
   min-height: 100%;
+  min-height: 100dvh;
   color: var(--text);
   font-family: "Segoe UI", "PingFang TC", "Noto Sans TC", sans-serif;
   background:
@@ -24,10 +25,19 @@ body {
     linear-gradient(180deg, var(--bg1), var(--bg0));
 }
 
+body {
+  padding:
+    env(safe-area-inset-top, 0px)
+    env(safe-area-inset-right, 0px)
+    env(safe-area-inset-bottom, 0px)
+    env(safe-area-inset-left, 0px);
+}
+
 .wrap {
-  width: min(920px, calc(100% - 28px));
+  width: min(920px, 100%);
   margin: 0 auto;
-  padding: 28px 0 48px;
+  padding: 24px 14px 40px;
+  min-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
 }
 
 .brand {
@@ -38,9 +48,11 @@ body {
 }
 
 .logo {
-  width: min(280px, 70vw);
+  width: min(280px, 72vw);
+  max-width: 100%;
   height: auto;
   display: block;
+  object-fit: contain;
 }
 
 .kicker {
@@ -49,13 +61,15 @@ body {
   letter-spacing: 0.12em;
   font-size: 0.78rem;
   text-transform: uppercase;
+  text-align: center;
 }
 
 h1 {
   margin: 0;
-  font-size: clamp(1.4rem, 3vw, 1.85rem);
+  font-size: clamp(1.25rem, 4.5vw, 1.85rem);
   font-weight: 800;
   letter-spacing: 0.04em;
+  text-align: center;
 }
 
 .lead {
@@ -82,7 +96,7 @@ h1 {
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
   gap: 12px;
   margin-top: 22px;
 }
@@ -123,19 +137,12 @@ h1 {
   letter-spacing: 0.04em;
 }
 
-.urls {
-  margin-top: 28px;
-  padding: 14px 16px;
-  border-radius: 10px;
-  border: 1px dashed var(--line);
-  color: var(--muted);
-  font-size: 0.88rem;
-  line-height: 1.6;
-}
+@media (max-width: 640px) {
+  .wrap {
+    padding: 16px 12px 28px;
+  }
 
-.urls code {
-  color: var(--text);
-  font-family: ui-monospace, Consolas, monospace;
-  font-size: 0.84rem;
-  word-break: break-all;
+  .logo {
+    width: min(220px, 78vw);
+  }
 }

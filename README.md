@@ -10,25 +10,25 @@
 
 ## 最小模板
 
-| 類型 | 路徑 |
-|---|---|
-| 塔防 | [`tower-defense/`](https://yijiamango.github.io/Innerpage_Game_Dev/tower-defense/) |
-| Survivors | [`survivors/`](https://yijiamango.github.io/Innerpage_Game_Dev/survivors/) |
-| Idle | [`idle/`](https://yijiamango.github.io/Innerpage_Game_Dev/idle/) |
-| Platformer | [`platformer/`](https://yijiamango.github.io/Innerpage_Game_Dev/platformer/) |
-| Roguelike | [`roguelike/`](https://yijiamango.github.io/Innerpage_Game_Dev/roguelike/) |
-| Card | [`card-builder/`](https://yijiamango.github.io/Innerpage_Game_Dev/card-builder/) |
-| Visual Novel | [`visual-novel/`](https://yijiamango.github.io/Innerpage_Game_Dev/visual-novel/) |
-| RPG | [`rpg/`](https://yijiamango.github.io/Innerpage_Game_Dev/rpg/) |
-| Match-3 | [`match3/`](https://yijiamango.github.io/Innerpage_Game_Dev/match3/) |
-| Shmup | [`shmup/`](https://yijiamango.github.io/Innerpage_Game_Dev/shmup/) |
-| Breakout | [`breakout/`](https://yijiamango.github.io/Innerpage_Game_Dev/breakout/) |
-| Snake | [`snake/`](https://yijiamango.github.io/Innerpage_Game_Dev/snake/) |
-| Falling Blocks | [`falling-blocks/`](https://yijiamango.github.io/Innerpage_Game_Dev/falling-blocks/) |
-| Endless Runner | [`endless-runner/`](https://yijiamango.github.io/Innerpage_Game_Dev/endless-runner/) |
-| Sokoban | [`sokoban/`](https://yijiamango.github.io/Innerpage_Game_Dev/sokoban/) |
-| Top-down Shooter | [`top-down-shooter/`](https://yijiamango.github.io/Innerpage_Game_Dev/top-down-shooter/) |
-| Rhythm | [`rhythm/`](https://yijiamango.github.io/Innerpage_Game_Dev/rhythm/) |
-| Merge | [`merge/`](https://yijiamango.github.io/Innerpage_Game_Dev/merge/) |
-| Asteroids | [`asteroids/`](https://yijiamango.github.io/Innerpage_Game_Dev/asteroids/) |
-| Tactics | [`tactics/`](https://yijiamango.github.io/Innerpage_Game_Dev/tactics/) |
+| 類型 | 說明 | 路徑 |
+|---|---|---|
+| 塔防 | 建塔、波次、金幣／生命 | [`tower-defense/`](https://yijiamango.github.io/Innerpage_Game_Dev/tower-defense/) |
+| Survivors | 移動、自動攻擊、刷怪、XP 升級三選一 | [`survivors/`](https://yijiamango.github.io/Innerpage_Game_Dev/survivors/) |
+| Idle | 點擊／放置產金、資料驅動升級、存檔 | [`idle/`](https://yijiamango.github.io/Innerpage_Game_Dev/idle/) |
+| Platformer | 跑跳、平台碰撞、硬幣、旗幟通關 | [`platformer/`](https://yijiamango.github.io/Innerpage_Game_Dev/platformer/) |
+| Roguelike | 程序地城、簡易 FOV、撞怪、下樓 | [`roguelike/`](https://yijiamango.github.io/Innerpage_Game_Dev/roguelike/) |
+| Card | 手牌能量、敵人意圖、勝利選牌入組 | [`card-builder/`](https://yijiamango.github.io/Innerpage_Game_Dev/card-builder/) |
+| Visual Novel | 腳本對話與分支結局 | [`visual-novel/`](https://yijiamango.github.io/Innerpage_Game_Dev/visual-novel/) |
+| RPG | 俯視移動、NPC 對話、回合戰鬥 | [`rpg/`](https://yijiamango.github.io/Innerpage_Game_Dev/rpg/) |
+| Match-3 | 相鄰交換、三連消除、重力補珠 | [`match3/`](https://yijiamango.github.io/Innerpage_Game_Dev/match3/) |
+| Shmup | 縱向射擊、敵機波次與子彈 | [`shmup/`](https://yijiamango.github.io/Innerpage_Game_Dev/shmup/) |
+| Breakout | 底板、球、打磚塊 | [`breakout/`](https://yijiamango.github.io/Innerpage_Game_Dev/breakout/) |
+| Snake | 移動、吃點變長、撞牆／自撞 | [`snake/`](https://yijiamango.github.io/Innerpage_Game_Dev/snake/) |
+| Falling Blocks | 方塊下落、旋轉、消行 | [`falling-blocks/`](https://yijiamango.github.io/Innerpage_Game_Dev/falling-blocks/) |
+| Endless Runner | 無盡跑酷、跳躍躲障礙 | [`endless-runner/`](https://yijiamango.github.io/Innerpage_Game_Dev/endless-runner/) |
+| Sokoban | 推箱子解謎、多關卡 | [`sokoban/`](https://yijiamango.github.io/Innerpage_Game_Dev/sokoban/) |
+| Top-down Shooter | WASD + 滑鼠瞄準手動射擊 | [`top-down-shooter/`](https://yijiamango.github.io/Innerpage_Game_Dev/top-down-shooter/) |
+| Rhythm | 四軌節奏、DFJK 判定 | [`rhythm/`](https://yijiamango.github.io/Innerpage_Game_Dev/rhythm/) |
+| Merge | 點格放下、同階相鄰合成 | [`merge/`](https://yijiamango.github.io/Innerpage_Game_Dev/merge/) |
+| Asteroids | 轉向推進射擊、隕石分裂 | [`asteroids/`](https://yijiamango.github.io/Innerpage_Game_Dev/asteroids/) |
+| Tactics | 戰棋移動／攻擊、敵方簡易 AI | [`tactics/`](https://yijiamango.github.io/Innerpage_Game_Dev/tactics/) |

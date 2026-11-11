@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   --bg0: #0f1412;
   --bg1: #1a2420;
   --panel: #24302b;
@@ -8,28 +8,153 @@
   --accent: #d4a017;
   --accent-2: #3cb371;
   --danger: #e4572e;
+  --canvas-w: 560;
+  --canvas-h: 480;
+  --chrome: 12.5rem;
 }
-* { box-sizing: border-box; }
-html, body {
-  margin: 0; min-height: 100%;
-  background: radial-gradient(ellipse 70% 50% at 50% -10%, #2a4036 0%, transparent 55%), linear-gradient(180deg, var(--bg1), var(--bg0));
-  color: var(--text); font-family: "Segoe UI", "Noto Sans TC", sans-serif;
+
+* {
+  box-sizing: border-box;
 }
-#app { width: min(980px, 100%); margin: 0 auto; padding: 16px 12px 28px; display: grid; gap: 10px; position: relative; }
-.hud, .bar {
-  display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding: 10px 14px;
-  background: color-mix(in srgb, var(--panel) 88%, black); border: 1px solid var(--line); border-radius: 10px;
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  min-height: 100dvh;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% -10%, #2a4036 0%, transparent 55%),
+    linear-gradient(180deg, var(--bg1), var(--bg0));
+  color: var(--text);
+  font-family: "Segoe UI", "Noto Sans TC", sans-serif;
 }
-.brand { font-weight: 800; letter-spacing: 0.08em; color: var(--accent); }
-.stat b { color: var(--accent-2); font-variant-numeric: tabular-nums; }
-.stat.muted, .status { color: var(--muted); font-size: 0.92rem; }
-#game { width: 100%; height: auto; display: block; border-radius: 12px; border: 1px solid var(--line); background: #121a17; touch-action: none; }
+
+body {
+  padding:
+    env(safe-area-inset-top, 0px)
+    env(safe-area-inset-right, 0px)
+    env(safe-area-inset-bottom, 0px)
+    env(safe-area-inset-left, 0px);
+}
+
+#app {
+  width: 100%;
+  max-width: min(980px, 100%);
+  min-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+  margin: 0 auto;
+  padding: 12px;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 10px;
+  align-content: start;
+  position: relative;
+}
+
+.hud,
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  padding: 10px 12px;
+  background: color-mix(in srgb, var(--panel) 88%, black);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.brand {
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}
+
+.stat b {
+  color: var(--accent-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.stat.muted,
+.status {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.stage {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+}
+
+#game {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: calc(
+    100dvh - var(--chrome) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)
+  );
+  aspect-ratio: var(--canvas-w) / var(--canvas-h);
+  margin-inline: auto;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: #121a17;
+  touch-action: none;
+}
+
 button {
-  appearance: none; border: 1px solid var(--line); background: var(--panel); color: var(--text);
-  border-radius: 8px; padding: 8px 14px; font: inherit; font-weight: 700; cursor: pointer;
+  appearance: none;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
 }
-button:hover:not(:disabled) { border-color: var(--accent-2); }
-button.primary { background: linear-gradient(180deg, #3f8f62, #2f6b49); border-color: #4aa572; }
-button:disabled { opacity: 0.45; cursor: not-allowed; }
-.status { margin-left: auto; }
-@media (max-width: 640px) { .status { margin-left: 0; width: 100%; } }
+
+button:hover:not(:disabled) {
+  border-color: var(--accent-2);
+}
+
+button.primary {
+  background: linear-gradient(180deg, #3f8f62, #2f6b49);
+  border-color: #4aa572;
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.status {
+  margin-left: auto;
+}
+
+@media (max-width: 640px) {
+  #app {
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .hud,
+  .bar {
+    padding: 8px 10px;
+    gap: 6px 10px;
+  }
+
+  .stat.muted {
+    width: 100%;
+  }
+
+  .status {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  button {
+    min-height: 40px;
+  }
+}

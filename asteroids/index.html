@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>最小 Asteroids · 星際戰岩</title>
     <link rel="stylesheet" href="./style.css" />
   </head>
@@ -14,7 +14,7 @@
         <div class="stat">命 <b id="lives">3</b></div>
         <div class="stat muted">←→ 轉向 · ↑ 推進 · Space 射</div>
       </header>
-      <canvas id="game" width="900" height="540" aria-label="Asteroids 畫布"></canvas>
+      <div class="stage"><canvas id="game" width="900" height="540" aria-label="Asteroids 畫布"></canvas></div>
       <footer class="bar">
         <button type="button" id="btn-restart" class="primary">重來</button>
         <span id="status" class="status">打碎隕石</span>

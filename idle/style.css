@@ -17,6 +17,7 @@ html,
 body {
   margin: 0;
   min-height: 100%;
+  min-height: 100dvh;
   background:
     radial-gradient(ellipse 70% 50% at 50% -10%, #2a4036 0%, transparent 55%),
     linear-gradient(180deg, var(--bg1), var(--bg0));
@@ -24,12 +25,23 @@ body {
   font-family: "Segoe UI", "Noto Sans TC", sans-serif;
 }
 
+body {
+  padding:
+    env(safe-area-inset-top, 0px)
+    env(safe-area-inset-right, 0px)
+    env(safe-area-inset-bottom, 0px)
+    env(safe-area-inset-left, 0px);
+}
+
 #app {
-  width: min(720px, 100%);
+  width: 100%;
+  max-width: min(720px, 100%);
+  min-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
   margin: 0 auto;
-  padding: 16px 12px 28px;
+  padding: 12px;
   display: grid;
   gap: 12px;
+  align-content: start;
 }
 
 .hud,
@@ -72,8 +84,9 @@ body {
 }
 
 .tap {
-  width: 160px;
-  height: 160px;
+  width: min(160px, 42vw);
+  height: min(160px, 42vw);
+  aspect-ratio: 1;
   border-radius: 50%;
   border: 3px solid #4aa572;
   background: radial-gradient(circle at 35% 30%, #5ecf8a, #2f6b49 70%);
@@ -95,13 +108,29 @@ body {
 
 .item {
   display: grid;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: 1fr auto;
   gap: 10px;
   align-items: center;
   padding: 12px 14px;
   border-radius: 10px;
   border: 1px solid var(--line);
   background: var(--panel);
+}
+
+@media (max-width: 640px) {
+  .status {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .item {
+    grid-template-columns: 1fr;
+  }
+
+  .item button {
+    width: 100%;
+    min-height: 40px;
+  }
 }
 
 .item .name {

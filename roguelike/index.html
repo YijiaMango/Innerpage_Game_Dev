@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>最小 Roguelike · 地城</title>
     <link rel="stylesheet" href="./style.css" />
   </head>
@@ -15,7 +15,7 @@
         <div class="stat">金幣 <b id="gold">0</b></div>
         <div class="stat muted">方向鍵／WASD 移動 · 撞怪攻擊 · 找樓梯</div>
       </header>
-      <canvas id="game" width="720" height="720" aria-label="地城畫布"></canvas>
+      <div class="stage"><canvas id="game" width="720" height="720" aria-label="地城畫布"></canvas></div>
       <footer class="bar">
         <button type="button" id="btn-restart" class="primary">重來</button>
         <span id="status" class="status">探索並下樓</span>

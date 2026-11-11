@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>最小 Merge · 合成</title>
     <link rel="stylesheet" href="./style.css" />
   </head>
@@ -14,7 +14,7 @@
         <div class="stat">分數 <b id="score">0</b></div>
         <div class="stat muted">點空位放下 · 同階相鄰會合成</div>
       </header>
-      <canvas id="game" width="480" height="480" aria-label="合成畫布"></canvas>
+      <div class="stage"><canvas id="game" width="480" height="480" aria-label="合成畫布"></canvas></div>
       <footer class="bar">
         <button type="button" id="btn-restart" class="primary">重來</button>
         <span id="status" class="status">下一顆：<b id="next">1</b></span>
