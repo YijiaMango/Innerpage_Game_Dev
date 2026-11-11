@@ -10,6 +10,7 @@ function pressed(...codes) {
 }
 
 let mouse = { x: 480, y: 270, down: false };
+let touchGoal = null;
 
 const state = {
   x: 480, y: 270, hp: 100, kills: 0, fireCd: 0, spawnT: 0, bullets: [], enemies: [], dead: false,
@@ -32,10 +33,16 @@ function pointer(e) {
 function update(dt) {
   if (state.dead) return;
   let mx = 0; let my = 0;
-  if (pressed("KeyW", "ArrowUp")) my -= 1;
-  if (pressed("KeyS", "ArrowDown")) my += 1;
-  if (pressed("KeyA", "ArrowLeft")) mx -= 1;
-  if (pressed("KeyD", "ArrowRight")) mx += 1;
+  if (touchGoal) {
+    mx = touchGoal.x - state.x;
+    my = touchGoal.y - state.y;
+    if (Math.hypot(mx, my) < 10) { mx = 0; my = 0; }
+  } else {
+    if (pressed("KeyW", "ArrowUp")) my -= 1;
+    if (pressed("KeyS", "ArrowDown")) my += 1;
+    if (pressed("KeyA", "ArrowLeft")) mx -= 1;
+    if (pressed("KeyD", "ArrowRight")) mx += 1;
+  }
   if (mx || my) {
     const len = Math.hypot(mx, my) || 1;
     state.x = Math.max(16, Math.min(canvas.width - 16, state.x + (mx / len) * 200 * dt));
@@ -86,9 +93,20 @@ function render() {
     ctx.fillText("DOWN", canvas.width / 2, canvas.height / 2); ctx.textAlign = "start";
   }
 }
-canvas.addEventListener("pointermove", pointer);
-canvas.addEventListener("pointerdown", (e) => { pointer(e); mouse.down = true; });
-window.addEventListener("pointerup", () => { mouse.down = false; });
+canvas.addEventListener("pointermove", (e) => {
+  pointer(e);
+  if (e.pointerType === "mouse" && e.buttons === 0) return;
+  if (touchGoal || mouse.down) touchGoal = { x: mouse.x, y: mouse.y };
+});
+canvas.addEventListener("pointerdown", (e) => {
+  pointer(e);
+  mouse.down = true;
+  touchGoal = { x: mouse.x, y: mouse.y };
+  try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
+});
+canvas.addEventListener("pointerup", () => { mouse.down = false; touchGoal = null; });
+canvas.addEventListener("pointercancel", () => { mouse.down = false; touchGoal = null; });
+window.addEventListener("pointerup", () => { mouse.down = false; touchGoal = null; });
 window.addEventListener("keydown", (e) => { KEYS.add(e.code); if (e.code.startsWith("Arrow")) e.preventDefault(); });
 window.addEventListener("keyup", (e) => KEYS.delete(e.code));
 document.getElementById("btn-restart").onclick = reset;

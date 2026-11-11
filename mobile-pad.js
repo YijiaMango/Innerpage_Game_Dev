@@ -1,198 +1,153 @@
 /**
- * 手機優先操作層 → window.Pad（可靠）
- * data-pad: move | move-jump | move-fire | move-act | lr | lr-serve | tetris | ship | lanes | swipe | jump
+ * 觸控直接操作（無虛擬方向鍵 UI）
+ * data-pad 只決定手勢語意：move | move-jump | move-fire | move-act | lr | lr-serve | tetris | ship | lanes | swipe | jump
  */
 (function () {
   const kind = (document.body && document.body.dataset.pad) || "";
   if (!kind || kind === "none") return;
   if (!window.Pad) {
-    console.warn("[mobile-pad] pad-input.js missing");
+    console.warn("[touch] pad-input.js missing");
     return;
   }
 
   const { down, up, pulse } = window.Pad;
-  const repeats = new Map();
+  document.body.classList.add("has-touch-controls");
+  document.body.classList.remove("has-mobile-pad", "pad-tall", "pad-lanes");
 
-  function spark(btn) {
-    if (!window.Feel || !btn) return;
-    const r = btn.getBoundingClientRect();
-    Feel.burst(r.left + r.width / 2, r.top + r.height / 2, {
-      n: 5,
-      speed: 2,
-      colors: ["#3cb371", "#d4a017"],
-      life: 0.22,
-    });
+  function canvasEl() {
+    return document.getElementById("game");
   }
 
-  function bindHold(btn, code, { repeat } = {}) {
-    const clear = () => {
-      const t = repeats.get(code);
-      if (t) clearInterval(t);
-      repeats.delete(code);
+  function localXY(canvas, e) {
+    const r = canvas.getBoundingClientRect();
+    return {
+      x: ((e.clientX - r.left) / r.width) * canvas.width,
+      y: ((e.clientY - r.top) / r.height) * canvas.height,
+      rx: e.clientX - r.left,
+      ry: e.clientY - r.top,
+      rw: r.width,
+      rh: r.height,
     };
-    const start = (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      btn.classList.add("is-down");
-      try {
-        btn.setPointerCapture(e.pointerId);
-      } catch (_) {}
-      down(code);
-      spark(btn);
-      if (repeat) {
-        clear();
-        repeats.set(
-          code,
-          setInterval(() => {
-            // 給只聽 keydown 的遊戲補脈衝
-            window.dispatchEvent(new CustomEvent("pad-key", { detail: { type: "down", code, repeat: true } }));
-          }, 110)
-        );
-      }
-    };
-    const end = (e) => {
-      if (e) e.preventDefault();
-      btn.classList.remove("is-down");
-      clear();
-      up(code);
-    };
-    btn.addEventListener("pointerdown", start);
-    ["pointerup", "pointercancel", "lostpointercapture"].forEach((t) => btn.addEventListener(t, end));
   }
 
-  function el(tag, cls, text) {
-    const n = document.createElement(tag);
-    if (cls) n.className = cls;
-    if (text != null) n.textContent = text;
-    return n;
-  }
-  function makeBtn(label, code, opt) {
-    const b = el("button", "pad-btn", label);
-    b.type = "button";
-    b.setAttribute("aria-label", label);
-    bindHold(b, code, opt || {});
-    return b;
-  }
-  function dpad(withDown, repeat) {
-    const box = el("div", "dpad");
-    box.appendChild(el("div", "spacer"));
-    box.appendChild(makeBtn("↑", "ArrowUp", { repeat }));
-    box.appendChild(el("div", "spacer"));
-    box.appendChild(makeBtn("←", "ArrowLeft", { repeat }));
-    box.appendChild(withDown ? makeBtn("↓", "ArrowDown", { repeat }) : el("div", "spacer"));
-    box.appendChild(makeBtn("→", "ArrowRight", { repeat }));
-    return box;
+  function clearMove() {
+    ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].forEach(up);
   }
 
-  /** 畫布虛擬搖桿：按住拖曳改方向 */
-  function attachStick(mode) {
-    const canvas = document.getElementById("game");
-    if (!canvas) return;
-    let active = false;
-    let ox = 0;
-    let oy = 0;
-    const codes = [];
-
-    function clearDirs() {
-      ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].forEach((c) => {
-        if (codes.includes(c)) up(c);
-      });
-      codes.length = 0;
+  function setDirs(dx, dy, mode) {
+    clearMove();
+    const dead = 16;
+    if (mode === "lr") {
+      if (dx < -dead) down("ArrowLeft");
+      if (dx > dead) down("ArrowRight");
+      return;
     }
-    function apply(dx, dy) {
-      clearDirs();
-      const dead = 18;
-      if (Math.hypot(dx, dy) < dead) return;
-      if (mode === "lr") {
-        if (dx < -dead) {
-          down("ArrowLeft");
-          codes.push("ArrowLeft");
-        }
-        if (dx > dead) {
-          down("ArrowRight");
-          codes.push("ArrowRight");
-        }
-        return;
-      }
-      const ax = Math.abs(dx);
-      const ay = Math.abs(dy);
-      if (ax > dead || ay > dead) {
-        if (ax >= ay * 0.7) {
-          if (dx < 0) {
-            down("ArrowLeft");
-            codes.push("ArrowLeft");
-          } else {
-            down("ArrowRight");
-            codes.push("ArrowRight");
-          }
-        }
-        if (ay >= ax * 0.7) {
-          if (dy < 0) {
-            down("ArrowUp");
-            codes.push("ArrowUp");
-          } else {
-            down("ArrowDown");
-            codes.push("ArrowDown");
-          }
-        }
-      }
+    const ax = Math.abs(dx);
+    const ay = Math.abs(dy);
+    if (ax < dead && ay < dead) return;
+    if (ax >= ay * 0.65) {
+      if (dx < 0) down("ArrowLeft");
+      else down("ArrowRight");
     }
+    if (ay >= ax * 0.65 && mode !== "lr") {
+      if (dy < 0) down("ArrowUp");
+      else down("ArrowDown");
+    }
+  }
 
-    canvas.addEventListener(
-      "pointerdown",
-      (e) => {
-        // 右半留給射擊／點擊的遊戲不搶（move-fire 左側當搖桿）
-        const rect = canvas.getBoundingClientRect();
-        const relX = e.clientX - rect.left;
-        if (mode === "move-fire" && relX > rect.width * 0.55) return;
+  function spark(x, y) {
+    if (window.Feel) Feel.burst(x, y, { n: 5, speed: 2, colors: ["#3cb371", "#d4a017"], life: 0.2 });
+  }
+
+  function onReady(fn) {
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", fn);
+    else fn();
+  }
+
+  /** 隱形搖桿：按住拖曳 */
+  function bindStick(mode) {
+    onReady(() => {
+      const canvas = canvasEl();
+      if (!canvas) return;
+      let active = false;
+      let ox = 0;
+      let oy = 0;
+      let pid = null;
+
+      canvas.addEventListener("pointerdown", (e) => {
+        const p = localXY(canvas, e);
+        if (mode === "move-fire" && p.rx > p.rw * 0.58) {
+          // 右側點射：朝觸點方向開火
+          down("Space");
+          spark(e.clientX, e.clientY);
+          const upFire = () => up("Space");
+          canvas.addEventListener("pointerup", upFire, { once: true });
+          canvas.addEventListener("pointercancel", upFire, { once: true });
+          // 同步滑鼠瞄準點（給 top-down-shooter）
+          canvas.dispatchEvent(
+            new PointerEvent("pointermove", {
+              clientX: e.clientX,
+              clientY: e.clientY,
+              bubbles: true,
+            })
+          );
+          return;
+        }
         active = true;
+        pid = e.pointerId;
         ox = e.clientX;
         oy = e.clientY;
         try {
           canvas.setPointerCapture(e.pointerId);
         } catch (_) {}
-      },
-      { passive: true }
-    );
-    canvas.addEventListener(
-      "pointermove",
-      (e) => {
-        if (!active) return;
-        apply(e.clientX - ox, e.clientY - oy);
-      },
-      { passive: true }
-    );
-    const end = () => {
-      active = false;
-      clearDirs();
-    };
-    canvas.addEventListener("pointerup", end);
-    canvas.addEventListener("pointercancel", end);
+        setDirs(0, 0, mode);
+      });
+
+      canvas.addEventListener("pointermove", (e) => {
+        if (!active || (pid != null && e.pointerId !== pid)) return;
+        setDirs(e.clientX - ox, e.clientY - oy, mode);
+      });
+
+      const end = (e) => {
+        if (pid != null && e.pointerId !== pid) return;
+        active = false;
+        pid = null;
+        clearMove();
+      };
+      canvas.addEventListener("pointerup", end);
+      canvas.addEventListener("pointercancel", end);
+    });
   }
 
-  const pad = el("div");
-  pad.id = "mobile-pad";
-  document.body.classList.add("has-mobile-pad");
-
-  if (kind === "lanes") {
-    document.body.classList.add("pad-lanes");
-    const row = el("div", "lane-row");
-    [
-      ["D", "KeyD"],
-      ["F", "KeyF"],
-      ["J", "KeyJ"],
-      ["K", "KeyK"],
-    ].forEach(([a, b]) => row.appendChild(makeBtn(a, b)));
-    pad.appendChild(row);
-    document.body.appendChild(pad);
-    return;
+  /** 點一下跳／互動 */
+  function bindTapCode(code, filter) {
+    onReady(() => {
+      const canvas = canvasEl();
+      if (!canvas) return;
+      let sx = 0;
+      let sy = 0;
+      let moved = false;
+      canvas.addEventListener("pointerdown", (e) => {
+        sx = e.clientX;
+        sy = e.clientY;
+        moved = false;
+      });
+      canvas.addEventListener("pointermove", (e) => {
+        if (Math.hypot(e.clientX - sx, e.clientY - sy) > 14) moved = true;
+      });
+      canvas.addEventListener("pointerup", (e) => {
+        if (moved) return;
+        if (filter && !filter(localXY(canvas, e))) return;
+        pulse(code, 70);
+        spark(e.clientX, e.clientY);
+      });
+    });
   }
 
-  if (kind === "swipe") {
-    document.body.classList.add("pad-tall");
-    document.body.appendChild(pad);
-    const hook = () => {
-      const canvas = document.getElementById("game");
+  /** 滑動改方向（格子遊戲） */
+  function bindSwipe() {
+    onReady(() => {
+      const canvas = canvasEl();
       if (!canvas) return;
       let sx = 0;
       let sy = 0;
@@ -203,63 +158,219 @@
       canvas.addEventListener("pointerup", (e) => {
         const dx = e.clientX - sx;
         const dy = e.clientY - sy;
-        if (Math.hypot(dx, dy) < 20) return;
+        if (Math.hypot(dx, dy) < 22) return;
         const code =
           Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? "ArrowRight" : "ArrowLeft") : dy > 0 ? "ArrowDown" : "ArrowUp";
-        pulse(code, 60);
-        if (window.Feel) Feel.burst(e.clientX, e.clientY, { n: 7, speed: 2.4, colors: ["#6ec8ff", "#3cb371"] });
+        pulse(code, 55);
+        spark(e.clientX, e.clientY);
       });
-    };
-    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", hook);
-    else hook();
-    return;
+    });
   }
 
-  if (kind === "jump") {
-    document.body.classList.add("pad-tall");
-    const right = el("div", "pad-side actions");
-    right.appendChild(makeBtn("跳", "Space"));
-    pad.appendChild(el("div", "pad-side"));
-    pad.appendChild(right);
-    document.body.appendChild(pad);
-    const hook = () => {
-      const canvas = document.getElementById("game");
+  /** 俄羅斯方塊手勢 */
+  function bindTetris() {
+    onReady(() => {
+      const canvas = canvasEl();
       if (!canvas) return;
-      canvas.addEventListener("pointerdown", () => pulse("Space", 80));
-    };
-    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", hook);
-    else hook();
-    return;
+      let sx = 0;
+      let sy = 0;
+      let moved = false;
+      canvas.addEventListener("pointerdown", (e) => {
+        sx = e.clientX;
+        sy = e.clientY;
+        moved = false;
+        try {
+          canvas.setPointerCapture(e.pointerId);
+        } catch (_) {}
+      });
+      canvas.addEventListener("pointermove", (e) => {
+        if (Math.hypot(e.clientX - sx, e.clientY - sy) > 12) moved = true;
+      });
+      canvas.addEventListener("pointerup", (e) => {
+        const dx = e.clientX - sx;
+        const dy = e.clientY - sy;
+        const dist = Math.hypot(dx, dy);
+        if (!moved || dist < 18) {
+          pulse("ArrowUp", 40); // 點一下旋轉
+          spark(e.clientX, e.clientY);
+          return;
+        }
+        if (Math.abs(dx) > Math.abs(dy)) {
+          pulse(dx > 0 ? "ArrowRight" : "ArrowLeft", 40);
+        } else if (dy > 80) {
+          pulse("Space", 40); // 長下滑硬降
+        } else if (dy > 0) {
+          pulse("ArrowDown", 40);
+        } else {
+          pulse("ArrowUp", 40);
+        }
+        spark(e.clientX, e.clientY);
+      });
+    });
   }
 
-  document.body.classList.add("pad-tall");
-  const left = el("div", "pad-side");
-  const right = el("div", "pad-side actions");
-
-  if (kind === "lr" || kind === "lr-serve") {
-    const row = el("div");
-    row.style.display = "flex";
-    row.style.gap = "8px";
-    row.appendChild(makeBtn("←", "ArrowLeft", { repeat: true }));
-    row.appendChild(makeBtn("→", "ArrowRight", { repeat: true }));
-    left.appendChild(row);
-    if (kind === "lr-serve") right.appendChild(makeBtn("發", "Space"));
-    attachStick("lr");
-  } else if (kind === "tetris") {
-    left.appendChild(dpad(true, true));
-    right.appendChild(makeBtn("硬降", "Space"));
-  } else if (kind === "ship") {
-    left.appendChild(dpad(false, false));
-    right.appendChild(makeBtn("射", "Space"));
-  } else {
-    left.appendChild(dpad(true, false));
-    if (kind === "move-jump") right.appendChild(makeBtn("跳", "Space"));
-    if (kind === "move-fire") right.appendChild(makeBtn("射", "Space"));
-    if (kind === "move-act") right.appendChild(makeBtn("互動", "KeyE"));
-    attachStick(kind);
+  /** 節奏：點擊對應軌道 */
+  function bindLanes() {
+    onReady(() => {
+      const canvas = canvasEl();
+      if (!canvas) return;
+      const codes = ["KeyD", "KeyF", "KeyJ", "KeyK"];
+      canvas.addEventListener("pointerdown", (e) => {
+        const p = localXY(canvas, e);
+        const lane = Math.min(3, Math.max(0, Math.floor((p.rx / p.rw) * 4)));
+        pulse(codes[lane], 40);
+        spark(e.clientX, e.clientY);
+      });
+    });
   }
 
-  pad.appendChild(left);
-  if (right.childNodes.length) pad.appendChild(right);
-  document.body.appendChild(pad);
+  /** 飛船：拖曳轉向＋推進，點第二下／點按射擊簡化為拖曳中自動推進、點空白射 */
+  function bindShip() {
+    onReady(() => {
+      const canvas = canvasEl();
+      if (!canvas) return;
+      let active = false;
+      let ox = 0;
+      canvas.addEventListener("pointerdown", (e) => {
+        active = true;
+        ox = e.clientX;
+        down("ArrowUp"); // 推進
+        try {
+          canvas.setPointerCapture(e.pointerId);
+        } catch (_) {}
+      });
+      canvas.addEventListener("pointermove", (e) => {
+        if (!active) return;
+        const dx = e.clientX - ox;
+        up("ArrowLeft");
+        up("ArrowRight");
+        if (dx < -12) down("ArrowLeft");
+        if (dx > 12) down("ArrowRight");
+      });
+      const end = () => {
+        active = false;
+        clearMove();
+        up("ArrowUp");
+      };
+      canvas.addEventListener("pointerup", (e) => {
+        // 短點射擊
+        const dx = Math.abs(e.clientX - ox);
+        end();
+        if (dx < 14) {
+          pulse("Space", 60);
+          spark(e.clientX, e.clientY);
+        }
+      });
+      canvas.addEventListener("pointercancel", end);
+    });
+  }
+
+  /** 左右跟隨：給 shmup／breakout 補強（遊戲本身也有 pointer） */
+  function bindFollowX(serveOnTap) {
+    onReady(() => {
+      const canvas = canvasEl();
+      if (!canvas) return;
+      const move = (e) => {
+        // 仍寫入 Pad，讓 KEY 方案也能動；座標跟隨由 game.js pointer 處理
+        const p = localXY(canvas, e);
+        clearMove();
+        const mid = canvas.width / 2;
+        if (p.x < mid - 20) down("ArrowLeft");
+        else if (p.x > mid + 20) down("ArrowRight");
+      };
+      canvas.addEventListener("pointerdown", (e) => {
+        move(e);
+        if (serveOnTap) pulse("Space", 50);
+      });
+      canvas.addEventListener("pointermove", (e) => {
+        if (e.pointerType === "mouse" && e.buttons === 0) return;
+        move(e);
+      });
+      canvas.addEventListener("pointerup", clearMove);
+      canvas.addEventListener("pointercancel", clearMove);
+    });
+  }
+
+  // —— 依類型掛手勢 ——
+  if (kind === "swipe") bindSwipe();
+  else if (kind === "jump") bindTapCode("Space");
+  else if (kind === "lanes") bindLanes();
+  else if (kind === "tetris") bindTetris();
+  else if (kind === "ship") bindShip();
+  else if (kind === "lr") bindFollowX(false);
+  else if (kind === "lr-serve") bindFollowX(true);
+  else if (kind === "move-jump") {
+    onReady(() => {
+      const canvas = canvasEl();
+      if (!canvas) return;
+      let ox = 0;
+      let oy = 0;
+      let moved = false;
+      let active = false;
+      canvas.addEventListener("pointerdown", (e) => {
+        active = true;
+        moved = false;
+        ox = e.clientX;
+        oy = e.clientY;
+        try {
+          canvas.setPointerCapture(e.pointerId);
+        } catch (_) {}
+      });
+      canvas.addEventListener("pointermove", (e) => {
+        if (!active) return;
+        const dx = e.clientX - ox;
+        const dy = e.clientY - oy;
+        if (Math.hypot(dx, dy) > 12) moved = true;
+        setDirs(dx, dy, "move");
+      });
+      const end = (e) => {
+        if (!active) return;
+        active = false;
+        clearMove();
+        if (!moved) {
+          pulse("Space", 70);
+          spark(e.clientX, e.clientY);
+        }
+      };
+      canvas.addEventListener("pointerup", end);
+      canvas.addEventListener("pointercancel", end);
+    });
+  } else if (kind === "move-act") {
+    onReady(() => {
+      const canvas = canvasEl();
+      if (!canvas) return;
+      let ox = 0;
+      let oy = 0;
+      let moved = false;
+      let active = false;
+      canvas.addEventListener("pointerdown", (e) => {
+        active = true;
+        moved = false;
+        ox = e.clientX;
+        oy = e.clientY;
+        try {
+          canvas.setPointerCapture(e.pointerId);
+        } catch (_) {}
+      });
+      canvas.addEventListener("pointermove", (e) => {
+        if (!active) return;
+        const dx = e.clientX - ox;
+        const dy = e.clientY - oy;
+        if (Math.hypot(dx, dy) > 12) moved = true;
+        setDirs(dx, dy, "move");
+      });
+      const end = (e) => {
+        if (!active) return;
+        active = false;
+        clearMove();
+        if (!moved) {
+          pulse("KeyE", 70);
+          spark(e.clientX, e.clientY);
+        }
+      };
+      canvas.addEventListener("pointerup", end);
+      canvas.addEventListener("pointercancel", end);
+    });
+  } else if (kind === "move-fire") bindStick("move-fire");
+  else bindStick("move");
 })();

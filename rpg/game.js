@@ -17,6 +17,14 @@ function pressed(...codes) {
   if (window.Pad && window.Pad.pressed) return window.Pad.pressed(...codes);
   return codes.some((c) => KEYS.has(c));
 }
+let touchGoal = null;
+function canvasTile(e) {
+  const r = canvas.getBoundingClientRect();
+  return {
+    x: (((e.clientX - r.left) / r.width) * canvas.width) / TILE,
+    y: (((e.clientY - r.top) / r.height) * canvas.height) / TILE,
+  };
+}
 
 const TILE = 40;
 const MAP_W = 24;
@@ -164,10 +172,19 @@ function update(dt) {
   if (state.mode !== "world") return;
   let dx = 0;
   let dy = 0;
-  if (pressed("KeyW", "ArrowUp")) dy -= 1;
-  if (pressed("KeyS", "ArrowDown")) dy += 1;
-  if (pressed("KeyA", "ArrowLeft")) dx -= 1;
-  if (pressed("KeyD", "ArrowRight")) dx += 1;
+  if (touchGoal) {
+    dx = touchGoal.x - state.x;
+    dy = touchGoal.y - state.y;
+    if (Math.hypot(dx, dy) < 0.15) {
+      dx = 0;
+      dy = 0;
+    }
+  } else {
+    if (pressed("KeyW", "ArrowUp")) dy -= 1;
+    if (pressed("KeyS", "ArrowDown")) dy += 1;
+    if (pressed("KeyA", "ArrowLeft")) dx -= 1;
+    if (pressed("KeyD", "ArrowRight")) dx += 1;
+  }
   if (!dx && !dy) return;
   const len = Math.hypot(dx, dy) || 1;
   const speed = 3.2;
@@ -215,6 +232,25 @@ window.addEventListener("keydown", (e) => {
   if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Space"].includes(e.code)) e.preventDefault();
 });
 window.addEventListener("keyup", (e) => KEYS.delete(e.code));
+canvas.addEventListener("pointerdown", (e) => {
+  if (state.mode !== "world") return;
+  touchGoal = canvasTile(e);
+  try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
+});
+canvas.addEventListener("pointermove", (e) => {
+  if (!touchGoal) return;
+  if (e.pointerType === "mouse" && e.buttons === 0) return;
+  touchGoal = canvasTile(e);
+});
+canvas.addEventListener("pointerup", (e) => {
+  const was = touchGoal;
+  touchGoal = null;
+  if (!was || state.mode !== "world") return;
+  // 短點靠近 NPC → 互動
+  const t = canvasTile(e);
+  if (Math.hypot(t.x - state.x, t.y - state.y) < 0.35) interact();
+});
+canvas.addEventListener("pointercancel", () => { touchGoal = null; });
 el.btnRestart.addEventListener("click", reset);
 
 let last = performance.now();

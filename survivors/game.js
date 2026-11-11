@@ -19,6 +19,14 @@ function pressed(...codes) {
   if (window.Pad && window.Pad.pressed) return window.Pad.pressed(...codes);
   return codes.some((c) => KEYS.has(c));
 }
+let touchGoal = null;
+function canvasPos(e) {
+  const r = canvas.getBoundingClientRect();
+  return {
+    x: ((e.clientX - r.left) / r.width) * canvas.width,
+    y: ((e.clientY - r.top) / r.height) * canvas.height,
+  };
+}
 
 const UPGRADES = [
   { id: "dmg", label: "傷害 +4", apply: (s) => (s.damage += 4) },
@@ -170,10 +178,19 @@ function update(dt) {
 
   let mx = 0;
   let my = 0;
-  if (pressed("KeyW", "ArrowUp")) my -= 1;
-  if (pressed("KeyS", "ArrowDown")) my += 1;
-  if (pressed("KeyA", "ArrowLeft")) mx -= 1;
-  if (pressed("KeyD", "ArrowRight")) mx += 1;
+  if (touchGoal) {
+    mx = touchGoal.x - state.x;
+    my = touchGoal.y - state.y;
+    if (Math.hypot(mx, my) < 8) {
+      mx = 0;
+      my = 0;
+    }
+  } else {
+    if (pressed("KeyW", "ArrowUp")) my -= 1;
+    if (pressed("KeyS", "ArrowDown")) my += 1;
+    if (pressed("KeyA", "ArrowLeft")) mx -= 1;
+    if (pressed("KeyD", "ArrowRight")) mx += 1;
+  }
   if (mx || my) {
     const len = Math.hypot(mx, my) || 1;
     state.x = Math.max(16, Math.min(canvas.width - 16, state.x + (mx / len) * state.speed * dt));
@@ -316,6 +333,22 @@ window.addEventListener("keydown", (e) => {
   if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Space"].includes(e.code)) e.preventDefault();
 });
 window.addEventListener("keyup", (e) => KEYS.delete(e.code));
+canvas.addEventListener("pointerdown", (e) => {
+  touchGoal = canvasPos(e);
+  try {
+    canvas.setPointerCapture(e.pointerId);
+  } catch (_) {}
+});
+canvas.addEventListener("pointermove", (e) => {
+  if (e.pointerType === "mouse" && e.buttons === 0) return;
+  if (touchGoal) touchGoal = canvasPos(e);
+});
+canvas.addEventListener("pointerup", () => {
+  touchGoal = null;
+});
+canvas.addEventListener("pointercancel", () => {
+  touchGoal = null;
+});
 el.btnRestart.addEventListener("click", reset);
 
 let last = performance.now();
