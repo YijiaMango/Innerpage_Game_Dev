@@ -181,6 +181,7 @@ function updateEnemy(e, dt) {
   if (e.waypoint >= pathPixels.length) {
     e.alive = false;
     state.lives -= 1;
+    if (window.Feel) Feel.hurt();
     if (state.lives <= 0) {
       state.lives = 0;
       state.gameOver = true;
@@ -244,6 +245,7 @@ function updateShot(s, dt) {
     if (s.target.hp <= 0) {
       s.target.alive = false;
       state.gold += s.target.reward;
+      if (window.Feel) Feel.boom(canvas, s.target.x, s.target.y);
       syncHud(null);
     }
     return;

@@ -19,7 +19,7 @@ function sync(msg) {
 }
 function jump() {
   if (state.dead || !state.onGround) return;
-  state.vy = -520; state.onGround = false;
+  state.vy = -520; state.onGround = false; if (window.Feel) Feel.shake(2, 40);
 }
 function update(dt) {
   if (state.dead) return;
@@ -41,7 +41,7 @@ function update(dt) {
   const px = 120; const pw = 28; const ph = 40;
   for (const o of state.obstacles) {
     if (px < o.x + o.w && px + pw > o.x && state.y < o.y + o.h && state.y + ph > o.y) {
-      state.dead = true; sync(`撞到了 · ${Math.floor(state.dist)}m`);
+      state.dead = true; sync(`撞到了 · ${Math.floor(state.dist)}m`); if (window.Feel) Feel.hurt();
     }
   }
   sync(null);

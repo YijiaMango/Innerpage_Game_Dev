@@ -30,8 +30,8 @@ function neighbors(x, y) {
 function checkOver() {
   const you = units.some((u) => u.side === "you" && u.hp > 0);
   const en = units.some((u) => u.side === "enemy" && u.hp > 0);
-  if (!you) { over = true; sync("敗北"); return true; }
-  if (!en) { over = true; sync("勝利"); return true; }
+  if (!you) { over = true; sync("敗北"); if (window.Feel) Feel.hurt(); return true; }
+  if (!en) { over = true; sync("勝利"); if (window.Feel) { Feel.flash('#3cb371', 120); Feel.shake(7, 140); } return true; }
   return false;
 }
 function endTurn() {
@@ -51,7 +51,7 @@ function enemyTurn() {
     foes.sort((a, b) => Math.abs(a.x - e.x) + Math.abs(a.y - e.y) - (Math.abs(b.x - e.x) + Math.abs(b.y - e.y)));
     const t = foes[0];
     if (Math.abs(t.x - e.x) + Math.abs(t.y - e.y) === 1) {
-      t.hp -= e.atk; sync(`敵攻擊 ${e.atk}`);
+      t.hp -= e.atk; sync(`敵攻擊 ${e.atk}`); if (window.Feel) Feel.hurt();
     } else {
       const opts = neighbors(e.x, e.y)
         .filter(([x, y]) => !at(x, y))
@@ -84,6 +84,7 @@ function click(e) {
     selected.moved = true;
     selected = null;
     sync("攻擊！");
+    if (window.Feel) Feel.hit(7);
     if (!checkOver()) render();
     else render();
     return;

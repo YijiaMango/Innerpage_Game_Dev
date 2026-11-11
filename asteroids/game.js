@@ -59,12 +59,13 @@ function update(dt) {
     r.y = wrap(r.y + r.vy * dt, canvas.height);
     for (const b of state.bullets) {
       if (b.life > 0 && Math.hypot(b.x - r.x, b.y - r.y) < r.r) {
-        b.life = 0; r.hit = true; state.score += Math.floor(50 / (r.r / 20));
+        b.life = 0; r.hit = true; state.score += Math.floor(50 / (r.r / 20)); if (window.Feel) Feel.boom(canvas, r.x, r.y);
       }
     }
     if (state.inv <= 0 && Math.hypot(state.x - r.x, state.y - r.y) < r.r + 10) {
       state.lives -= 1; state.inv = 2;
       state.x = 450; state.y = 270; state.vx = 0; state.vy = 0;
+      if (window.Feel) Feel.hurt();
       if (state.lives <= 0) { state.dead = true; sync("全滅"); }
       else sync("被撞了");
     }

@@ -128,6 +128,7 @@ function battleAct(act) {
     const dmg = 6 + Math.floor(Math.random() * 5);
     b.ehp -= dmg;
     b.log = `你造成 ${dmg} 傷害。`;
+    if (window.Feel) Feel.hit(6);
     if (b.ehp <= 0) {
       state.gold += b.npc.gold;
       state.npcs = state.npcs.filter((x) => x.id !== b.npc.id);
@@ -135,12 +136,14 @@ function battleAct(act) {
       state.battle = null;
       hidePanel();
       sync(`勝利！+${b.npc.gold} 金`);
+      if (window.Feel) { Feel.flash('#3cb371', 100); Feel.shake(5, 100); }
       return;
     }
   }
   const edmg = b.npc.atk + Math.floor(Math.random() * 3);
   state.hp -= edmg;
   b.log += ` 敵人反擊 ${edmg}。`;
+  if (window.Feel) Feel.hurt();
   if (state.hp <= 0) {
     state.hp = 0;
     state.mode = "dead";

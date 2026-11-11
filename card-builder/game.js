@@ -123,9 +123,11 @@ function playCard(idx) {
     state.over = true;
     state.won = true;
     sync("勝利！");
+    if (window.Feel) { Feel.flash('#3cb371', 120); Feel.shake(8, 140); }
     showReward();
   } else {
     sync(`打出 ${c.name}`);
+    if (window.Feel) Feel.hit(4);
   }
   renderHand();
   sync(null);
@@ -140,10 +142,12 @@ function endTurn() {
   state.block = 0;
   state.buff = 0;
   state.php -= dmg;
+  if (dmg > 0 && window.Feel) Feel.hurt();
   if (state.php <= 0) {
     state.php = 0;
     state.over = true;
     sync("敗北");
+    if (window.Feel) Feel.hurt();
     renderHand();
     return;
   }

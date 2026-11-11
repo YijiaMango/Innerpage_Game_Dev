@@ -51,7 +51,7 @@ function update(dt) {
     for (const b of state.bullets) {
       if (Math.hypot(b.x - e.x, b.y - e.y) < 16) { e.hp -= 1; b.y = -99; }
     }
-    if (e.hp <= 0) { e.dead = true; state.score += 100; }
+    if (e.hp <= 0) { e.dead = true; state.score += 100; if (window.Feel) Feel.boom(canvas, e.x, e.y); }
     if (e.y > canvas.height + 30) e.dead = true;
   }
   state.enemies = state.enemies.filter((e) => !e.dead);
@@ -61,7 +61,8 @@ function update(dt) {
     if (Math.hypot(b.x - state.x, b.y - state.y) < 14) {
       b.y = 9999;
       state.hp -= 1;
-      if (state.hp <= 0) { state.hp = 0; state.dead = true; sync("墜機"); }
+      if (window.Feel) Feel.hit(5);
+      if (state.hp <= 0) { state.hp = 0; state.dead = true; sync("墜機"); if (window.Feel) Feel.hurt(); }
     }
   }
   state.eBullets = state.eBullets.filter((b) => b.y < canvas.height + 20);

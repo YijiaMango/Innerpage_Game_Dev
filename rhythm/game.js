@@ -39,7 +39,7 @@ function update(dt) {
     const travel = 1.6;
     n.y = HIT_Y - ((n.hitT - state.t) / travel) * (HIT_Y + 40);
     if (state.t - n.hitT > 0.18) {
-      n.alive = false; state.combo = 0; sync("Miss");
+      n.alive = false; state.combo = 0; sync("Miss"); if (window.Feel) Feel.shake(5, 80);
     }
   }
   state.notes = state.notes.filter((n) => n.alive);
@@ -55,12 +55,13 @@ function hit(lane) {
     const d = Math.abs(state.t - n.hitT);
     if (d < bestAbs) { bestAbs = d; best = n; }
   }
-  if (!best || bestAbs > 0.18) { state.combo = 0; sync("空拍"); return; }
+  if (!best || bestAbs > 0.18) { state.combo = 0; sync("空拍"); if (window.Feel) Feel.shake(4, 60); return; }
   best.alive = false;
   const perfect = bestAbs < 0.06;
   state.combo += 1;
   state.score += (perfect ? 300 : 100) + state.combo * 5;
   sync(perfect ? "Perfect" : "Good");
+  if (window.Feel) { if (perfect) { Feel.flash('#d4a017', 50); Feel.shake(3, 50); } else Feel.shake(2, 40); }
 }
 function render() {
   ctx.fillStyle = "#101816"; ctx.fillRect(0, 0, canvas.width, canvas.height);

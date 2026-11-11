@@ -105,6 +105,7 @@ function show(id) {
 }
 
 function advance() {
+  if (window.Feel) Feel.tap(el.textbox);
   const n = SCRIPT[nodeId];
   if (!n || n.choices || !n.next) return;
   show(n.next);

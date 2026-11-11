@@ -22,7 +22,7 @@ function empty() { return Array.from({ length: ROWS }, () => Array(COLS).fill(nu
 function spawn() {
   const type = KEYS[Math.floor(Math.random() * KEYS.length)];
   piece = { type, rot: SHAPES[type].map((r) => r.slice()), x: 3, y: 0 };
-  if (collide(piece.x, piece.y, piece.rot)) { dead = true; sync("堆滿了"); }
+  if (collide(piece.x, piece.y, piece.rot)) { dead = true; sync("堆滿了"); if (window.Feel) Feel.hurt(); }
 }
 function collide(x, y, rot) {
   for (let r = 0; r < rot.length; r++) {
@@ -53,12 +53,21 @@ function merge() {
   for (let r = ROWS - 1; r >= 0; r--) {
     if (board[r].every(Boolean)) { board.splice(r, 1); board.unshift(Array(COLS).fill(null)); cleared++; r++; }
   }
-  if (cleared) { lines += cleared; score += [0, 100, 300, 500, 800][cleared]; sync(`消 ${cleared} 行`); }
+  if (cleared) {
+    lines += cleared;
+    score += [0, 100, 300, 500, 800][cleared];
+    sync(`消 ${cleared} 行`);
+    if (window.Feel) {
+      Feel.shake(4 + cleared * 2, 100);
+      Feel.flash("#3cb371", 60);
+    }
+  }
   spawn();
 }
 function hardDrop() {
   while (!collide(piece.x, piece.y + 1, piece.rot)) piece.y++;
   merge();
+  if (window.Feel) Feel.shake(2, 40);
 }
 function reset() {
   board = empty(); score = 0; lines = 0; dead = false; dropAcc = 0; spawn(); sync("新局");

@@ -68,10 +68,12 @@ function tryMove(dx, dy) {
     const bx = nx + dx; const by = ny + dy; const bk = key(bx, by);
     if (walls.has(bk) || boxes.has(bk)) return;
     boxes.delete(nk); boxes.add(bk);
+    if (window.Feel) Feel.shake(3, 50);
   }
   px = nx; py = ny; steps += 1;
   if ([...goals].every((g) => boxes.has(g))) {
     won = true;
+    if (window.Feel) { Feel.flash('#d4a017', 100); Feel.shake(6, 120); }
     if (levelIdx < LEVELS.length - 1) sync("過關！按重來進下一關會重置；方向鍵可繼續本關");
     else sync("全部通關");
     // auto advance on next reset if won mid-run - better: advance immediately after short beat

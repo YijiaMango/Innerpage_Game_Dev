@@ -102,12 +102,14 @@ function buy(id) {
   save();
   sync();
   el.status.textContent = `買了 ${u.name}`;
+  if (window.Feel) Feel.hit(3);
 }
 
 el.btnTap.addEventListener("click", () => {
   state.gold += state.clickPower;
   save();
   sync();
+  if (window.Feel) Feel.tap(el.btnTap);
 });
 
 el.btnReset.addEventListener("click", () => {

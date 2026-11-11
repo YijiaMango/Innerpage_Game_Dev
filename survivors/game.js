@@ -155,6 +155,7 @@ function gainXp(n) {
     state.lv += 1;
     state.xpNeed = xpNeedFor(state.lv);
     levelUp();
+    if (window.Feel) { Feel.flash('#d4a017', 90); Feel.shake(5, 100); }
   }
 }
 
@@ -207,6 +208,7 @@ function update(dt) {
       if (Math.hypot(e.x - s.x, e.y - s.y) < e.r + 4) {
         e.hp -= s.dmg;
         s.life = 0;
+        if (window.Feel) Feel.burstCanvas(canvas, e.x, e.y, { n: 4, color: '#fff3c4', speed: 2 });
         break;
       }
     }
@@ -223,6 +225,7 @@ function update(dt) {
         state.hp = 0;
         state.dead = true;
         sync("你掛了 — 按重來");
+        if (window.Feel) Feel.hurt();
       }
     }
   }
@@ -230,7 +233,8 @@ function update(dt) {
   for (const e of state.enemies) {
     if (e.hp <= 0) {
       state.kills += 1;
-      state.gems.push({ x: e.x, y: e.y, v: 4 + Math.floor(Math.random() * 3) });
+      state.gems.push
+      if (window.Feel) Feel.score(canvas, e.x, e.y);({ x: e.x, y: e.y, v: 4 + Math.floor(Math.random() * 3) });
       e.dead = true;
     }
   }

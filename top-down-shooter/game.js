@@ -53,12 +53,12 @@ function update(dt) {
     const ang = Math.atan2(state.y - e.y, state.x - e.x);
     e.x += Math.cos(ang) * 90 * dt; e.y += Math.sin(ang) * 90 * dt;
     for (const b of state.bullets) {
-      if (b.life > 0 && Math.hypot(b.x - e.x, b.y - e.y) < 14) { e.hp -= 10; b.life = 0; }
+      if (b.life > 0 && Math.hypot(b.x - e.x, b.y - e.y) < 14) { e.hp -= 10; b.life = 0; if (window.Feel && e.hp <= 0) Feel.boom(canvas, e.x, e.y); else if (window.Feel) Feel.burstCanvas(canvas, e.x, e.y, { n: 3, color: '#fff3c4', speed: 2 }); }
     }
     if (e.hp <= 0) { e.dead = true; state.kills += 1; }
     if (Math.hypot(e.x - state.x, e.y - state.y) < 20) {
       state.hp -= 20 * dt;
-      if (state.hp <= 0) { state.hp = 0; state.dead = true; sync("陣亡"); }
+      if (state.hp <= 0) { state.hp = 0; state.dead = true; sync("陣亡"); if (window.Feel) Feel.hurt(); }
     }
   }
   state.bullets = state.bullets.filter((b) => b.life > 0);

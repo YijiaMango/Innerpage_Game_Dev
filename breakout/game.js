@@ -49,6 +49,7 @@ function update(dt) {
   if (b.y < b.r) b.vy *= -1;
   if (b.y > canvas.height) {
     state.lives -= 1;
+    if (window.Feel) Feel.hurt();
     if (state.lives <= 0) sync("失敗");
     else { resetBall(); sync("再發一球"); }
     return;
@@ -56,11 +57,12 @@ function update(dt) {
   if (b.y + b.r >= 440 && b.y < 455 && b.x > state.px && b.x < state.px + state.pw && b.vy > 0) {
     b.vy *= -1;
     b.vx = ((b.x - (state.px + state.pw / 2)) / (state.pw / 2)) * 260;
+    if (window.Feel) Feel.shake(3, 60);
   }
   for (const br of state.bricks) {
     if (br.hp <= 0) continue;
     if (b.x > br.x && b.x < br.x + br.w && b.y > br.y && b.y < br.y + br.h) {
-      br.hp = 0; b.vy *= -1; state.score += 10;
+      br.hp = 0; b.vy *= -1; state.score += 10; if (window.Feel) Feel.boom(canvas, br.x + br.w / 2, br.y + br.h / 2);
     }
   }
   if (state.bricks.every((br) => br.hp <= 0)) { state.won = true; sync("清台！"); }

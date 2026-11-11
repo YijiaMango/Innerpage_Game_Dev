@@ -44,6 +44,7 @@ function mergeFrom(c, r) {
   if (group.length < 2) return false;
   for (const [x, y] of group) grid[y][x] = 0;
   grid[r][c] = lv + 1;
+  if (window.Feel) Feel.hit(5);
   maxLv = Math.max(maxLv, lv + 1);
   score += group.length * lv * 10;
   mergeFrom(c, r);
@@ -52,6 +53,7 @@ function mergeFrom(c, r) {
 function place(c, r) {
   if (busy || grid[r][c]) return;
   grid[r][c] = next;
+  if (window.Feel) Feel.tap(canvas);
   maxLv = Math.max(maxLv, next);
   next = 1 + Math.floor(Math.random() * Math.min(3, maxLv));
   mergeFrom(c, r);

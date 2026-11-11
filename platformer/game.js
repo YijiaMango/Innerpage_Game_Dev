@@ -80,6 +80,7 @@ function update(dt) {
   if ((KEYS.has("Space") || KEYS.has("ArrowUp") || KEYS.has("KeyW")) && state.onGround) {
     state.vy = -JUMP;
     state.onGround = false;
+    if (window.Feel) Feel.shake(2, 40);
   }
 
   state.vy += GRAVITY * dt;
@@ -108,6 +109,7 @@ function update(dt) {
   if (state.y > canvas.height + 40) {
     state.dead = true;
     sync("掉下去了 — 重來");
+    if (window.Feel) Feel.hurt();
   }
 
   COIN_SPOTS.forEach(([cx, cy], i) => {
@@ -116,12 +118,14 @@ function update(dt) {
       state.coinFlags[i] = false;
       state.coins += 1;
       sync(`硬幣 ${state.coins}`);
+      if (window.Feel) Feel.score(canvas, cx, cy);
     }
   });
 
   if (aabb(state.x, state.y, state.w, state.h, FLAG.x - 8, FLAG.y, FLAG.w + 16, FLAG.h)) {
     state.won = true;
     sync("通關！");
+    if (window.Feel) { Feel.flash('#3cb371', 120); Feel.shake(6, 120); }
   }
 }
 

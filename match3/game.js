@@ -71,6 +71,7 @@ async function resolve() {
     const m = findMatches();
     if (!m.length) break;
     gained += collapse(m, true);
+    if (window.Feel) Feel.hit(4);
     render();
     await new Promise((r) => setTimeout(r, 120));
   }
@@ -89,7 +90,7 @@ function trySwap(a, b) {
   swap(a, b);
   if (!findMatches().length) {
     swap(a, b);
-    sync("無消除，退回");
+    sync("無消除，退回"); if (window.Feel) Feel.shake(4, 80);
     render();
     return;
   }

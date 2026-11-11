@@ -165,14 +165,14 @@ function tryMove(dx, dy) {
     m.hp -= 5;
     if (m.hp <= 0) {
       state.gold += 3 + state.floor;
-      sync("擊殺怪物");
+      sync("擊殺怪物"); if (window.Feel) Feel.hit(7);
     } else {
       state.hp -= m.atk;
-      sync(`互砍：怪剩 ${m.hp} HP`);
+      sync(`互砍：怪剩 ${m.hp} HP`); if (window.Feel) Feel.shake(5, 80);
       if (state.hp <= 0) {
         state.hp = 0;
         state.dead = true;
-        sync("你死了");
+        sync("你死了"); if (window.Feel) Feel.hurt();
       }
     }
   } else {
@@ -196,6 +196,7 @@ function tryMove(dx, dy) {
         state.hp = 0;
         state.dead = true;
         sync("被咬死了");
+        if (window.Feel) Feel.hurt();
       }
     } else if (dist < 8) {
       const sx = Math.sign(state.px - mon.x);
