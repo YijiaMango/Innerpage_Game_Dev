@@ -4,6 +4,11 @@ const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 const el = { score: document.getElementById("score"), lives: document.getElementById("lives"), status: document.getElementById("status") };
 const KEYS = new Set();
+function pressed(...codes) {
+  if (window.Pad && window.Pad.pressed) return window.Pad.pressed(...codes);
+  return codes.some((c) => KEYS.has(c));
+}
+
 const COLS = 10; const ROWS = 5; const BW = 64; const BH = 22;
 
 const state = {
@@ -35,8 +40,8 @@ function sync(msg) {
 function update(dt) {
   if (state.won || state.lives <= 0) return;
   let dx = 0;
-  if (KEYS.has("ArrowLeft") || KEYS.has("KeyA")) dx -= 1;
-  if (KEYS.has("ArrowRight") || KEYS.has("KeyD")) dx += 1;
+  if (pressed("ArrowLeft", "KeyA")) dx -= 1;
+  if (pressed("ArrowRight", "KeyD")) dx += 1;
   state.px = Math.max(0, Math.min(canvas.width - state.pw, state.px + dx * 420 * dt));
   if (!state.running) {
     state.ball.x = state.px + state.pw / 2;

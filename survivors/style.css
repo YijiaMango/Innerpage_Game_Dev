@@ -181,3 +181,9 @@ button, .pad-btn {
   .hud .brand { width: 100%; }
   button { min-height: 44px; padding: 10px 14px; }
 }
+
+@media (max-width: 900px) {
+  #app { max-width: 100%; width: 100%; }
+  .hud { font-size: 0.86rem; }
+  .stat.muted { display: none; }
+}

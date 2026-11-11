@@ -257,7 +257,7 @@ function render() {
   }
 }
 
-window.addEventListener("keydown", (e) => {
+function handleCode(code) {
   const map = {
     ArrowUp: [0, -1],
     KeyW: [0, -1],
@@ -268,10 +268,17 @@ window.addEventListener("keydown", (e) => {
     ArrowRight: [1, 0],
     KeyD: [1, 0],
   };
-  const d = map[e.code];
+  const d = map[code];
   if (!d) return;
-  e.preventDefault();
   tryMove(d[0], d[1]);
+}
+window.addEventListener("pad-key", (e) => {
+  if (e.detail && e.detail.type === "down") handleCode(e.detail.code);
+});
+window.addEventListener("keydown", (e) => {
+  if (!{ ArrowUp: 1, KeyW: 1, ArrowDown: 1, KeyS: 1, ArrowLeft: 1, KeyA: 1, ArrowRight: 1, KeyD: 1 }[e.code]) return;
+  e.preventDefault();
+  handleCode(e.code);
 });
 
 el.btnRestart.addEventListener("click", () => rebuildFloor(false));

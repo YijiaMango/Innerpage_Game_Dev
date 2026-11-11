@@ -4,6 +4,11 @@ const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 const el = { hp: document.getElementById("hp"), kills: document.getElementById("kills"), status: document.getElementById("status") };
 const KEYS = new Set();
+function pressed(...codes) {
+  if (window.Pad && window.Pad.pressed) return window.Pad.pressed(...codes);
+  return codes.some((c) => KEYS.has(c));
+}
+
 let mouse = { x: 480, y: 270, down: false };
 
 const state = {
@@ -27,17 +32,17 @@ function pointer(e) {
 function update(dt) {
   if (state.dead) return;
   let mx = 0; let my = 0;
-  if (KEYS.has("KeyW") || KEYS.has("ArrowUp")) my -= 1;
-  if (KEYS.has("KeyS") || KEYS.has("ArrowDown")) my += 1;
-  if (KEYS.has("KeyA") || KEYS.has("ArrowLeft")) mx -= 1;
-  if (KEYS.has("KeyD") || KEYS.has("ArrowRight")) mx += 1;
+  if (pressed("KeyW", "ArrowUp")) my -= 1;
+  if (pressed("KeyS", "ArrowDown")) my += 1;
+  if (pressed("KeyA", "ArrowLeft")) mx -= 1;
+  if (pressed("KeyD", "ArrowRight")) mx += 1;
   if (mx || my) {
     const len = Math.hypot(mx, my) || 1;
     state.x = Math.max(16, Math.min(canvas.width - 16, state.x + (mx / len) * 200 * dt));
     state.y = Math.max(16, Math.min(canvas.height - 16, state.y + (my / len) * 200 * dt));
   }
   state.fireCd -= dt;
-  if ((mouse.down || KEYS.has("Space")) && state.fireCd <= 0) {
+  if ((mouse.down || pressed("Space")) && state.fireCd <= 0) {
     const ang = Math.atan2(mouse.y - state.y, mouse.x - state.x);
     state.bullets.push({ x: state.x, y: state.y, vx: Math.cos(ang) * 520, vy: Math.sin(ang) * 520, life: 0.9 });
     state.fireCd = 0.12;

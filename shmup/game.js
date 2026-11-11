@@ -4,6 +4,11 @@ const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 const el = { score: document.getElementById("score"), hp: document.getElementById("hp"), status: document.getElementById("status") };
 const KEYS = new Set();
+function pressed(...codes) {
+  if (window.Pad && window.Pad.pressed) return window.Pad.pressed(...codes);
+  return codes.some((c) => KEYS.has(c));
+}
+
 
 const state = {
   x: 240, y: 640, hp: 5, score: 0, fireCd: 0, spawnT: 0, elapsed: 0,
@@ -23,8 +28,8 @@ function update(dt) {
   if (state.dead) return;
   state.elapsed += dt;
   let dx = 0;
-  if (KEYS.has("ArrowLeft") || KEYS.has("KeyA")) dx -= 1;
-  if (KEYS.has("ArrowRight") || KEYS.has("KeyD")) dx += 1;
+  if (pressed("ArrowLeft", "KeyA")) dx -= 1;
+  if (pressed("ArrowRight", "KeyD")) dx += 1;
   state.x = Math.max(16, Math.min(canvas.width - 16, state.x + dx * 280 * dt));
 
   state.fireCd -= dt;

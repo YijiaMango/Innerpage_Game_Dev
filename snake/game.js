@@ -53,11 +53,20 @@ function render() {
     ctx.fillText("DEAD", canvas.width / 2, canvas.height / 2); ctx.textAlign = "start";
   }
 }
-window.addEventListener("keydown", (e) => {
+function handleCode(code) {
   const map = { ArrowUp: [0, -1], KeyW: [0, -1], ArrowDown: [0, 1], KeyS: [0, 1], ArrowLeft: [-1, 0], KeyA: [-1, 0], ArrowRight: [1, 0], KeyD: [1, 0] };
-  const d = map[e.code]; if (!d) return; e.preventDefault();
+  const d = map[code];
+  if (!d) return;
   if (d[0] === -dir.x && d[1] === -dir.y) return;
   nextDir = { x: d[0], y: d[1] };
+}
+window.addEventListener("pad-key", (e) => {
+  if (e.detail && e.detail.type === "down") handleCode(e.detail.code);
+});
+window.addEventListener("keydown", (e) => {
+  if (!{ ArrowUp: 1, KeyW: 1, ArrowDown: 1, KeyS: 1, ArrowLeft: 1, KeyA: 1, ArrowRight: 1, KeyD: 1 }[e.code]) return;
+  e.preventDefault();
+  handleCode(e.code);
 });
 document.getElementById("btn-restart").onclick = reset;
 let last = performance.now();

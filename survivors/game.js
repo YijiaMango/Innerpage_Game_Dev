@@ -15,6 +15,11 @@ const el = {
 };
 
 const KEYS = new Set();
+function pressed(...codes) {
+  if (window.Pad && window.Pad.pressed) return window.Pad.pressed(...codes);
+  return codes.some((c) => KEYS.has(c));
+}
+
 const UPGRADES = [
   { id: "dmg", label: "傷害 +4", apply: (s) => (s.damage += 4) },
   { id: "spd", label: "移速 +20", apply: (s) => (s.speed += 20) },
@@ -165,10 +170,10 @@ function update(dt) {
 
   let mx = 0;
   let my = 0;
-  if (KEYS.has("KeyW") || KEYS.has("ArrowUp")) my -= 1;
-  if (KEYS.has("KeyS") || KEYS.has("ArrowDown")) my += 1;
-  if (KEYS.has("KeyA") || KEYS.has("ArrowLeft")) mx -= 1;
-  if (KEYS.has("KeyD") || KEYS.has("ArrowRight")) mx += 1;
+  if (pressed("KeyW", "ArrowUp")) my -= 1;
+  if (pressed("KeyS", "ArrowDown")) my += 1;
+  if (pressed("KeyA", "ArrowLeft")) mx -= 1;
+  if (pressed("KeyD", "ArrowRight")) mx += 1;
   if (mx || my) {
     const len = Math.hypot(mx, my) || 1;
     state.x = Math.max(16, Math.min(canvas.width - 16, state.x + (mx / len) * state.speed * dt));

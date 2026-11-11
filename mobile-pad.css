@@ -2,7 +2,7 @@
 #mobile-pad {
   position: fixed;
   inset: auto 0 0 0;
-  z-index: 40;
+  z-index: 120;
   pointer-events: none;
   padding: 0 max(10px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom))
     max(10px, env(safe-area-inset-left));
@@ -23,9 +23,9 @@
 
 #mobile-pad .dpad {
   display: grid;
-  grid-template-columns: 56px 56px 56px;
-  grid-template-rows: 56px 56px 56px;
-  gap: 6px;
+  grid-template-columns: 64px 64px 64px;
+  grid-template-rows: 64px 64px 64px;
+  gap: 8px;
 }
 
 #mobile-pad .dpad .spacer {
@@ -33,10 +33,10 @@
 }
 
 #mobile-pad button.pad-btn {
-  width: 56px;
-  height: 56px;
-  min-height: 56px;
-  border-radius: 14px;
+  width: 64px;
+  height: 64px;
+  min-height: 64px;
+  border-radius: 16px;
   border: 1px solid rgba(61, 82, 72, 0.95);
   background: rgba(36, 48, 43, 0.78);
   color: #e7f0ea;
@@ -124,7 +124,7 @@ body.has-mobile-pad #app {
 }
 
 body.has-mobile-pad.pad-tall #app {
-  padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+  padding-bottom: calc(148px + env(safe-area-inset-bottom, 0px));
 }
 
 body.has-mobile-pad.pad-lanes #app {

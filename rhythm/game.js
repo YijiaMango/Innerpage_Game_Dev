@@ -87,6 +87,9 @@ function render() {
     ctx.fillText("CLEAR", canvas.width / 2, canvas.height / 2); ctx.textAlign = "start";
   }
 }
+window.addEventListener("pad-key", (e) => {
+  if (e.detail && e.detail.type === "down" && e.detail.code in KEYMAP) hit(KEYMAP[e.detail.code]);
+});
 window.addEventListener("keydown", (e) => {
   if (e.code in KEYMAP) { e.preventDefault(); hit(KEYMAP[e.code]); }
 });

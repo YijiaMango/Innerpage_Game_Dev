@@ -13,6 +13,11 @@ const el = {
 };
 
 const KEYS = new Set();
+function pressed(...codes) {
+  if (window.Pad && window.Pad.pressed) return window.Pad.pressed(...codes);
+  return codes.some((c) => KEYS.has(c));
+}
+
 const TILE = 40;
 const MAP_W = 24;
 const MAP_H = 13;
@@ -159,10 +164,10 @@ function update(dt) {
   if (state.mode !== "world") return;
   let dx = 0;
   let dy = 0;
-  if (KEYS.has("KeyW") || KEYS.has("ArrowUp")) dy -= 1;
-  if (KEYS.has("KeyS") || KEYS.has("ArrowDown")) dy += 1;
-  if (KEYS.has("KeyA") || KEYS.has("ArrowLeft")) dx -= 1;
-  if (KEYS.has("KeyD") || KEYS.has("ArrowRight")) dx += 1;
+  if (pressed("KeyW", "ArrowUp")) dy -= 1;
+  if (pressed("KeyS", "ArrowDown")) dy += 1;
+  if (pressed("KeyA", "ArrowLeft")) dx -= 1;
+  if (pressed("KeyD", "ArrowRight")) dx += 1;
   if (!dx && !dy) return;
   const len = Math.hypot(dx, dy) || 1;
   const speed = 3.2;
@@ -201,6 +206,9 @@ function render() {
   }
 }
 
+window.addEventListener("pad-key", (e) => {
+  if (e.detail && e.detail.type === "down" && e.detail.code === "KeyE") interact();
+});
 window.addEventListener("keydown", (e) => {
   KEYS.add(e.code);
   if (e.code === "KeyE") interact();

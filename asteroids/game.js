@@ -4,6 +4,11 @@ const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 const el = { score: document.getElementById("score"), lives: document.getElementById("lives"), status: document.getElementById("status") };
 const KEYS = new Set();
+function pressed(...codes) {
+  if (window.Pad && window.Pad.pressed) return window.Pad.pressed(...codes);
+  return codes.some((c) => KEYS.has(c));
+}
+
 
 const state = {
   x: 450, y: 270, ang: -Math.PI / 2, vx: 0, vy: 0, fireCd: 0,
@@ -31,9 +36,9 @@ function sync(msg) {
 }
 function update(dt) {
   if (state.dead) return;
-  if (KEYS.has("ArrowLeft") || KEYS.has("KeyA")) state.ang -= 3.2 * dt;
-  if (KEYS.has("ArrowRight") || KEYS.has("KeyD")) state.ang += 3.2 * dt;
-  if (KEYS.has("ArrowUp") || KEYS.has("KeyW")) {
+  if (pressed("ArrowLeft", "KeyA")) state.ang -= 3.2 * dt;
+  if (pressed("ArrowRight", "KeyD")) state.ang += 3.2 * dt;
+  if (pressed("ArrowUp", "KeyW")) {
     state.vx += Math.cos(state.ang) * 220 * dt;
     state.vy += Math.sin(state.ang) * 220 * dt;
   }
@@ -41,7 +46,7 @@ function update(dt) {
   state.x = wrap(state.x + state.vx * dt, canvas.width);
   state.y = wrap(state.y + state.vy * dt, canvas.height);
   state.fireCd -= dt; state.inv -= dt;
-  if ((KEYS.has("Space") || KEYS.has("KeyJ")) && state.fireCd <= 0) {
+  if ((pressed("Space", "KeyJ")) && state.fireCd <= 0) {
     state.bullets.push({
       x: state.x + Math.cos(state.ang) * 16,
       y: state.y + Math.sin(state.ang) * 16,

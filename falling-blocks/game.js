@@ -104,16 +104,22 @@ function render() {
     ctx.fillText("TOP OUT", canvas.width / 2, canvas.height / 2); ctx.textAlign = "start";
   }
 }
-window.addEventListener("keydown", (e) => {
+function handleCode(code) {
   if (dead) return;
-  if (e.code === "ArrowLeft" || e.code === "KeyA") { if (!collide(piece.x - 1, piece.y, piece.rot)) piece.x--; }
-  if (e.code === "ArrowRight" || e.code === "KeyD") { if (!collide(piece.x + 1, piece.y, piece.rot)) piece.x++; }
-  if (e.code === "ArrowDown" || e.code === "KeyS") { if (!collide(piece.x, piece.y + 1, piece.rot)) piece.y++; }
-  if (e.code === "ArrowUp" || e.code === "KeyW") {
+  if (code === "ArrowLeft" || code === "KeyA") { if (!collide(piece.x - 1, piece.y, piece.rot)) piece.x--; }
+  if (code === "ArrowRight" || code === "KeyD") { if (!collide(piece.x + 1, piece.y, piece.rot)) piece.x++; }
+  if (code === "ArrowDown" || code === "KeyS") { if (!collide(piece.x, piece.y + 1, piece.rot)) piece.y++; }
+  if (code === "ArrowUp" || code === "KeyW") {
     const rot = rotate(piece.rot);
     if (!collide(piece.x, piece.y, rot)) piece.rot = rot;
   }
-  if (e.code === "Space") { e.preventDefault(); hardDrop(); }
+  if (code === "Space") hardDrop();
+}
+window.addEventListener("pad-key", (e) => {
+  if (e.detail && e.detail.type === "down") handleCode(e.detail.code);
+});
+window.addEventListener("keydown", (e) => {
+  handleCode(e.code);
   if (e.code.startsWith("Arrow") || e.code === "Space") e.preventDefault();
 });
 document.getElementById("btn-restart").onclick = reset;

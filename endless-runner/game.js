@@ -60,6 +60,9 @@ function render() {
     ctx.fillText("TRIP", canvas.width / 2, canvas.height / 2); ctx.textAlign = "start";
   }
 }
+window.addEventListener("pad-key", (e) => {
+  if (e.detail && e.detail.type === "down" && (e.detail.code === "Space" || e.detail.code === "ArrowUp" || e.detail.code === "KeyW")) jump();
+});
 window.addEventListener("keydown", (e) => {
   if (e.code === "Space" || e.code === "ArrowUp" || e.code === "KeyW") { e.preventDefault(); jump(); }
 });

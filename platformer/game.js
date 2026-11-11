@@ -9,6 +9,11 @@ const el = {
 };
 
 const KEYS = new Set();
+function pressed(...codes) {
+  if (window.Pad && window.Pad.pressed) return window.Pad.pressed(...codes);
+  return codes.some((c) => KEYS.has(c));
+}
+
 const GRAVITY = 1800;
 const MOVE = 260;
 const JUMP = 620;
@@ -74,10 +79,10 @@ function update(dt) {
   if (state.won || state.dead) return;
 
   let ax = 0;
-  if (KEYS.has("ArrowLeft") || KEYS.has("KeyA")) ax -= 1;
-  if (KEYS.has("ArrowRight") || KEYS.has("KeyD")) ax += 1;
+  if (pressed("ArrowLeft", "KeyA")) ax -= 1;
+  if (pressed("ArrowRight", "KeyD")) ax += 1;
   state.vx = ax * MOVE;
-  if ((KEYS.has("Space") || KEYS.has("ArrowUp") || KEYS.has("KeyW")) && state.onGround) {
+  if (pressed("Space", "ArrowUp", "KeyW") && state.onGround) {
     state.vy = -JUMP;
     state.onGround = false;
     if (window.Feel) Feel.shake(2, 40);
