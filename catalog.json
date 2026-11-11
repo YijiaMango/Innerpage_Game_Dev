@@ -54,19 +54,5 @@
     "description": "俯視移動、NPC 對話、回合戰鬥。",
     "version": "0.1.0",
     "path": "rpg/"
-  },
-  {
-    "id": "multiplayer-shell",
-    "title": "最小多人薄殼",
-    "description": "房間狀態 + 延遲佇列 mock，可換真實同步層。",
-    "version": "0.1.0",
-    "path": "multiplayer-shell/"
-  },
-  {
-    "id": "multiplayer-survivors",
-    "title": "最小多人 Survivors",
-    "description": "Survivors 玩法 + mock 隊友位置／射擊同步。",
-    "version": "0.1.0",
-    "path": "multiplayer-survivors/"
   }
 ]

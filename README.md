@@ -20,5 +20,3 @@
 | Card | [`card-builder/`](https://yijiamango.github.io/Innerpage_Game_Dev/card-builder/) |
 | Visual Novel | [`visual-novel/`](https://yijiamango.github.io/Innerpage_Game_Dev/visual-novel/) |
 | RPG | [`rpg/`](https://yijiamango.github.io/Innerpage_Game_Dev/rpg/) |
-| 多人薄殼 | [`multiplayer-shell/`](https://yijiamango.github.io/Innerpage_Game_Dev/multiplayer-shell/) |
-| 多人 Survivors | [`multiplayer-survivors/`](https://yijiamango.github.io/Innerpage_Game_Dev/multiplayer-survivors/) |
