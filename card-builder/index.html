@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>最小 Card · 牌組構築</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="hud">
+        <div class="brand">MIN CARD</div>
+        <div class="stat">你 HP <b id="php">30</b></div>
+        <div class="stat">能量 <b id="energy">3</b>/<span id="energy-max">3</span></div>
+        <div class="stat">敵 HP <b id="ehp">40</b></div>
+        <div class="stat muted">出牌 → 結束回合 · 牌組 JSON 驅動</div>
+      </header>
+      <section class="arena">
+        <div class="enemy" id="enemy-box">
+          <div class="name">訓練假人</div>
+          <div class="intent" id="intent">意圖：攻擊 8</div>
+        </div>
+        <div class="log" id="log"></div>
+      </section>
+      <section class="hand" id="hand"></section>
+      <footer class="bar">
+        <button type="button" id="btn-end" class="primary">結束回合</button>
+        <button type="button" id="btn-restart">重來</button>
+        <span id="status" class="status">打光敵人 HP</span>
+      </footer>
+      <div id="reward" class="reward hidden">
+        <h2>勝利 — 選一張加入牌組</h2>
+        <div id="reward-row" class="reward-row"></div>
+      </div>
+    </div>
+    <script src="./game.js"></script>
+  </body>
+</html>

@@ -1,0 +1,163 @@
+:root {
+  --bg0: #0f1412;
+  --bg1: #1a2420;
+  --panel: #24302b;
+  --line: #3d5248;
+  --text: #e7f0ea;
+  --muted: #8aa396;
+  --accent: #d4a017;
+  --accent-2: #3cb371;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% -10%, #2a4036 0%, transparent 55%),
+    linear-gradient(180deg, var(--bg1), var(--bg0));
+  color: var(--text);
+  font-family: "Segoe UI", "Noto Sans TC", sans-serif;
+}
+
+#app {
+  width: min(900px, 100%);
+  margin: 0 auto;
+  padding: 16px 12px 28px;
+  display: grid;
+  gap: 10px;
+}
+
+.hud,
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  padding: 10px 14px;
+  background: color-mix(in srgb, var(--panel) 88%, black);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.brand {
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}
+
+.stat.muted,
+.status,
+.hint {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.stage {
+  position: relative;
+  min-height: 420px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  overflow: hidden;
+  background: #121a17;
+}
+
+.bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 30% 40%, rgba(60, 179, 113, 0.18), transparent 45%),
+    linear-gradient(180deg, #243044, #121a17 70%);
+  transition: background 0.35s ease;
+}
+
+.bg.night {
+  background:
+    radial-gradient(circle at 70% 30%, rgba(212, 160, 23, 0.15), transparent 40%),
+    linear-gradient(180deg, #141824, #0a100e 70%);
+}
+
+.bg.lab {
+  background:
+    radial-gradient(circle at 50% 60%, rgba(110, 200, 255, 0.12), transparent 50%),
+    linear-gradient(180deg, #1a2a28, #101816 70%);
+}
+
+.speaker {
+  position: absolute;
+  left: 24px;
+  bottom: 150px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--panel) 90%, black);
+  border: 1px solid var(--line);
+  font-weight: 800;
+  color: var(--accent-2);
+}
+
+.textbox {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  min-height: 120px;
+  padding: 16px 18px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: rgba(15, 20, 18, 0.88);
+  cursor: pointer;
+}
+
+.textbox p {
+  margin: 0 0 10px;
+  line-height: 1.55;
+  font-size: 1.05rem;
+}
+
+.choices {
+  display: grid;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.choices.hidden {
+  display: none;
+}
+
+.choices button {
+  text-align: left;
+  width: 100%;
+}
+
+.hint {
+  text-align: right;
+}
+
+button {
+  appearance: none;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button:hover {
+  border-color: var(--accent-2);
+}
+
+button.primary {
+  background: linear-gradient(180deg, #3f8f62, #2f6b49);
+  border-color: #4aa572;
+}
+
+.status {
+  margin-left: auto;
+}

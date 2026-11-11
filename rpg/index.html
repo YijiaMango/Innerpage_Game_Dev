@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>最小 RPG · 傳統 RPG 殼</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="hud">
+        <div class="brand">MIN RPG</div>
+        <div class="stat">HP <b id="hp">40</b></div>
+        <div class="stat">金幣 <b id="gold">0</b></div>
+        <div class="stat muted">WASD 移動 · 靠近 NPC 按 E 對話／戰鬥</div>
+      </header>
+      <canvas id="game" width="960" height="540" aria-label="RPG 畫布"></canvas>
+      <div id="panel" class="panel hidden">
+        <div id="panel-body"></div>
+        <div id="panel-actions" class="panel-actions"></div>
+      </div>
+      <footer class="bar">
+        <button type="button" id="btn-restart" class="primary">重來</button>
+        <span id="status" class="status">找村民對話，打史萊姆練等</span>
+      </footer>
+    </div>
+    <script src="./game.js"></script>
+  </body>
+</html>

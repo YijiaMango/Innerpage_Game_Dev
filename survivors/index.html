@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>最小 Survivors · Bullet Heaven</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="hud">
+        <div class="brand">MIN SURVIVORS</div>
+        <div class="stat">HP <b id="hp">100</b></div>
+        <div class="stat">LV <b id="lv">1</b></div>
+        <div class="stat">XP <b id="xp">0</b>/<span id="xp-need">20</span></div>
+        <div class="stat">殺敵 <b id="kills">0</b></div>
+        <div class="stat muted" id="hint">WASD／方向鍵移動 · 自動射擊</div>
+      </header>
+      <canvas id="game" width="960" height="540" aria-label="Survivors 畫布"></canvas>
+      <footer class="bar">
+        <button type="button" id="btn-restart" class="primary">重來</button>
+        <span id="status" class="status">撐住並撿 XP 寶石升級</span>
+      </footer>
+      <div id="pick" class="pick hidden" role="dialog" aria-label="升級三選一">
+        <h2>升級 — 選一項</h2>
+        <div class="pick-row" id="pick-row"></div>
+      </div>
+    </div>
+    <script src="./game.js"></script>
+  </body>
+</html>

@@ -9,44 +9,17 @@
   <a href="https://yijiamango.github.io/Innerpage_Game_Dev/">https://yijiamango.github.io/Innerpage_Game_Dev/</a>
 </p>
 
-<p align="center">
-  <strong>最小塔防</strong><br />
-  <a href="https://yijiamango.github.io/Innerpage_Game_Dev/tower-defense/">https://yijiamango.github.io/Innerpage_Game_Dev/tower-defense/</a>
-</p>
+## 最小模板
 
-## 結構
-
-```
-Innerpage_Game_Dev/
-├── index.html / hub.* / catalog.json   ← 入口目錄
-├── tower-defense/                      ← 子遊戲 #1
-├── 遊戲模板說明書.md
-└── README.md
-```
-
-## 加新子遊戲
-
-1. 新建資料夾，例如 `survivors/`，內放可開的 `index.html`
-2. 在 `catalog.json` 加一筆：
-
-```json
-{
-  "id": "survivors",
-  "title": "Survivors 殼",
-  "description": "說明",
-  "version": "0.1.0",
-  "path": "survivors/"
-}
-```
-
-3. Push 後網址即為：  
-   `https://yijiamango.github.io/Innerpage_Game_Dev/survivors/`
-
-## 本機
-
-```bash
-cd Innerpage_Game_Dev
-python -m http.server 8765
-```
-
-開 http://127.0.0.1:8765/
+| 類型 | 路徑 |
+|---|---|
+| 塔防 | [`tower-defense/`](https://yijiamango.github.io/Innerpage_Game_Dev/tower-defense/) |
+| Survivors | [`survivors/`](https://yijiamango.github.io/Innerpage_Game_Dev/survivors/) |
+| Idle | [`idle/`](https://yijiamango.github.io/Innerpage_Game_Dev/idle/) |
+| Platformer | [`platformer/`](https://yijiamango.github.io/Innerpage_Game_Dev/platformer/) |
+| Roguelike | [`roguelike/`](https://yijiamango.github.io/Innerpage_Game_Dev/roguelike/) |
+| Card | [`card-builder/`](https://yijiamango.github.io/Innerpage_Game_Dev/card-builder/) |
+| Visual Novel | [`visual-novel/`](https://yijiamango.github.io/Innerpage_Game_Dev/visual-novel/) |
+| RPG | [`rpg/`](https://yijiamango.github.io/Innerpage_Game_Dev/rpg/) |
+| 多人薄殼 | [`multiplayer-shell/`](https://yijiamango.github.io/Innerpage_Game_Dev/multiplayer-shell/) |
+| 多人 Survivors | [`multiplayer-survivors/`](https://yijiamango.github.io/Innerpage_Game_Dev/multiplayer-survivors/) |

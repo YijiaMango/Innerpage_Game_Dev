@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>最小多人薄殼 · Room Sync Mock</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="hud">
+        <div class="brand">MIN NET SHELL</div>
+        <div class="stat">房間 <b id="room">demo</b></div>
+        <div class="stat">延遲模擬 <b id="lag">80</b>ms</div>
+        <div class="stat muted">本地 mock 房間同步 · 可換成 Colyseus／Socket</div>
+      </header>
+      <canvas id="game" width="960" height="420" aria-label="同步示意畫布"></canvas>
+      <footer class="bar">
+        <button type="button" id="btn-join" class="primary">重新進房</button>
+        <label class="lag-label">延遲 <input type="range" id="lag-range" min="0" max="250" value="80" /></label>
+        <span id="status" class="status">你＝綠 · 假遠端＝橙（跟隨你的延遲狀態）</span>
+      </footer>
+    </div>
+    <script src="./game.js"></script>
+  </body>
+</html>

@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>最小 Idle · 放置點擊</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="hud">
+        <div class="brand">MIN IDLE</div>
+        <div class="stat">金幣 <b id="gold">0</b></div>
+        <div class="stat">產速 <b id="rate">0</b>/s</div>
+        <div class="stat muted">資料驅動升級 · localStorage 存檔</div>
+      </header>
+      <main class="stage">
+        <button type="button" id="btn-tap" class="tap" aria-label="點擊產金">點我</button>
+        <p class="lead">點擊賺金，買升級自動產金。可當資料驅動練手殼。</p>
+      </main>
+      <section class="shop" id="shop"></section>
+      <footer class="bar">
+        <button type="button" id="btn-reset">清檔重來</button>
+        <span id="status" class="status">第一次點擊開始</span>
+      </footer>
+    </div>
+    <script src="./game.js"></script>
+  </body>
+</html>

@@ -1,0 +1,87 @@
+:root {
+  --bg0: #0f1412;
+  --bg1: #1a2420;
+  --panel: #24302b;
+  --line: #3d5248;
+  --text: #e7f0ea;
+  --muted: #8aa396;
+  --accent: #d4a017;
+  --accent-2: #3cb371;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% -10%, #2a4036 0%, transparent 55%),
+    linear-gradient(180deg, var(--bg1), var(--bg0));
+  color: var(--text);
+  font-family: "Segoe UI", "Noto Sans TC", sans-serif;
+}
+
+#app {
+  width: min(980px, 100%);
+  margin: 0 auto;
+  padding: 16px 12px 28px;
+  display: grid;
+  gap: 10px;
+}
+
+.hud,
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  padding: 10px 14px;
+  background: color-mix(in srgb, var(--panel) 88%, black);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.brand {
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+}
+
+.stat b {
+  color: var(--accent-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.stat.muted,
+.status {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+#game {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: #121a17;
+}
+
+button {
+  appearance: none;
+  border: 1px solid #4aa572;
+  background: linear-gradient(180deg, #3f8f62, #2f6b49);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.status {
+  margin-left: auto;
+}

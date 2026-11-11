@@ -2,8 +2,71 @@
   {
     "id": "tower-defense",
     "title": "最小塔防",
-    "description": "純 Canvas 塔防：建塔、波次、金幣／生命。遊戲模板實驗 #1",
+    "description": "純 Canvas 塔防：建塔、波次、金幣／生命。",
     "version": "0.1.0",
     "path": "tower-defense/"
+  },
+  {
+    "id": "survivors",
+    "title": "最小 Survivors",
+    "description": "移動、自動攻擊、刷怪、XP 升級三選一。",
+    "version": "0.1.0",
+    "path": "survivors/"
+  },
+  {
+    "id": "idle",
+    "title": "最小 Idle",
+    "description": "點擊／放置產金、資料驅動升級、localStorage。",
+    "version": "0.1.0",
+    "path": "idle/"
+  },
+  {
+    "id": "platformer",
+    "title": "最小 Platformer",
+    "description": "跑跳、平台碰撞、硬幣、旗幟通關。",
+    "version": "0.1.0",
+    "path": "platformer/"
+  },
+  {
+    "id": "roguelike",
+    "title": "最小 Roguelike",
+    "description": "程序地城、簡易 FOV、撞怪、樓梯換層。",
+    "version": "0.1.0",
+    "path": "roguelike/"
+  },
+  {
+    "id": "card-builder",
+    "title": "最小 Card",
+    "description": "手牌能量、敵人意圖、勝利選牌入組。",
+    "version": "0.1.0",
+    "path": "card-builder/"
+  },
+  {
+    "id": "visual-novel",
+    "title": "最小 Visual Novel",
+    "description": "腳本對話與三分支結局。",
+    "version": "0.1.0",
+    "path": "visual-novel/"
+  },
+  {
+    "id": "rpg",
+    "title": "最小 RPG",
+    "description": "俯視移動、NPC 對話、回合戰鬥。",
+    "version": "0.1.0",
+    "path": "rpg/"
+  },
+  {
+    "id": "multiplayer-shell",
+    "title": "最小多人薄殼",
+    "description": "房間狀態 + 延遲佇列 mock，可換真實同步層。",
+    "version": "0.1.0",
+    "path": "multiplayer-shell/"
+  },
+  {
+    "id": "multiplayer-survivors",
+    "title": "最小多人 Survivors",
+    "description": "Survivors 玩法 + mock 隊友位置／射擊同步。",
+    "version": "0.1.0",
+    "path": "multiplayer-survivors/"
   }
 ]

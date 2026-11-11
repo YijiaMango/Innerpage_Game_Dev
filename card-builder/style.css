@@ -1,0 +1,190 @@
+:root {
+  --bg0: #0f1412;
+  --bg1: #1a2420;
+  --panel: #24302b;
+  --line: #3d5248;
+  --text: #e7f0ea;
+  --muted: #8aa396;
+  --accent: #d4a017;
+  --accent-2: #3cb371;
+  --danger: #e4572e;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% -10%, #2a4036 0%, transparent 55%),
+    linear-gradient(180deg, var(--bg1), var(--bg0));
+  color: var(--text);
+  font-family: "Segoe UI", "Noto Sans TC", sans-serif;
+}
+
+#app {
+  width: min(860px, 100%);
+  margin: 0 auto;
+  padding: 16px 12px 28px;
+  display: grid;
+  gap: 10px;
+  position: relative;
+}
+
+.hud,
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  padding: 10px 14px;
+  background: color-mix(in srgb, var(--panel) 88%, black);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.brand {
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}
+
+.stat b {
+  color: var(--accent-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.stat.muted,
+.status {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.arena {
+  display: grid;
+  gap: 10px;
+  min-height: 160px;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: #121a17;
+}
+
+.enemy {
+  justify-self: center;
+  text-align: center;
+  padding: 16px 28px;
+  border-radius: 12px;
+  border: 1px solid var(--danger);
+  background: #2a1c18;
+}
+
+.enemy .name {
+  font-weight: 800;
+  font-size: 1.2rem;
+}
+
+.intent {
+  margin-top: 6px;
+  color: #f0a090;
+}
+
+.log {
+  color: var(--muted);
+  font-size: 0.9rem;
+  min-height: 1.4em;
+  text-align: center;
+}
+
+.hand,
+.reward-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.card {
+  width: 140px;
+  min-height: 150px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, #2a3832, var(--panel));
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+}
+
+.card:hover:not(:disabled) {
+  border-color: var(--accent-2);
+}
+
+.card:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.card .cost {
+  color: var(--accent);
+  font-weight: 800;
+}
+
+.card .title {
+  font-weight: 800;
+  margin: 6px 0;
+}
+
+.card .desc {
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.35;
+}
+
+button {
+  appearance: none;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button.primary {
+  background: linear-gradient(180deg, #3f8f62, #2f6b49);
+  border-color: #4aa572;
+}
+
+.status {
+  margin-left: auto;
+}
+
+.reward {
+  position: absolute;
+  inset: 70px 12px 70px;
+  display: grid;
+  place-content: center;
+  gap: 14px;
+  background: rgba(8, 12, 10, 0.88);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 20px;
+  z-index: 5;
+}
+
+.reward.hidden {
+  display: none;
+}
+
+.reward h2 {
+  margin: 0;
+  text-align: center;
+  color: var(--accent);
+}
