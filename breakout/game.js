@@ -91,6 +91,18 @@ window.addEventListener("keydown", (e) => {
   if (e.code.startsWith("Arrow")) e.preventDefault();
 });
 window.addEventListener("keyup", (e) => KEYS.delete(e.code));
+canvas.addEventListener("pointerdown", (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const x = ((e.clientX - rect.left) / rect.width) * canvas.width;
+  state.px = Math.max(0, Math.min(canvas.width - state.pw, x - state.pw / 2));
+  if (!state.running && state.lives > 0 && !state.won) state.running = true;
+});
+canvas.addEventListener("pointermove", (e) => {
+  if (e.pointerType === "mouse" && e.buttons === 0) return;
+  const rect = canvas.getBoundingClientRect();
+  const x = ((e.clientX - rect.left) / rect.width) * canvas.width;
+  state.px = Math.max(0, Math.min(canvas.width - state.pw, x - state.pw / 2));
+});
 document.getElementById("btn-restart").onclick = reset;
 let last = performance.now();
 function frame(now) { const dt = Math.min(0.05, (now - last) / 1000); last = now; update(dt); render(); requestAnimationFrame(frame); }

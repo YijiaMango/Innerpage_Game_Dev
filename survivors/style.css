@@ -170,3 +170,14 @@ button:disabled {
 .pick h2 { margin: 0; text-align: center; color: var(--accent); }
 .pick-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
 .pick-row button { min-width: min(140px, 100%); text-align: left; line-height: 1.35; }
+
+/* 手機優先觸控 */
+button, .pad-btn {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+@media (max-width: 900px) {
+  .stat.muted { font-size: 0.8rem; }
+  .hud .brand { width: 100%; }
+  button { min-height: 44px; padding: 10px 14px; }
+}

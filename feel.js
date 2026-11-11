@@ -1,4 +1,4 @@
-/** 最簡物理回饋：晃動、閃光、粒子、震動 */
+/** 回饋：粒子為主，晃動／閃光／震動為輔 */
 (function (global) {
   const root = () => document.getElementById("app") || document.body;
   let shakeT = 0;
@@ -6,6 +6,7 @@
   let flashEl = null;
   let fxCanvas = null;
   let fxCtx = null;
+  let started = false;
   const particles = [];
 
   function ensureFlash() {
@@ -28,8 +29,9 @@
   function ensureFx() {
     if (fxCanvas) return fxCtx;
     fxCanvas = document.createElement("canvas");
-    fxCanvas.width = window.innerWidth * devicePixelRatio;
-    fxCanvas.height = window.innerHeight * devicePixelRatio;
+    const dpr = devicePixelRatio || 1;
+    fxCanvas.width = Math.floor(window.innerWidth * dpr);
+    fxCanvas.height = Math.floor(window.innerHeight * dpr);
     Object.assign(fxCanvas.style, {
       position: "fixed",
       inset: "0",
@@ -41,15 +43,22 @@
     document.body.appendChild(fxCanvas);
     fxCtx = fxCanvas.getContext("2d");
     window.addEventListener("resize", () => {
-      fxCanvas.width = window.innerWidth * devicePixelRatio;
-      fxCanvas.height = window.innerHeight * devicePixelRatio;
+      const r = devicePixelRatio || 1;
+      fxCanvas.width = Math.floor(window.innerWidth * r);
+      fxCanvas.height = Math.floor(window.innerHeight * r);
     });
-    requestAnimationFrame(tickFx);
+    if (!started) {
+      started = true;
+      requestAnimationFrame(tickFx);
+    }
     return fxCtx;
   }
 
-  function tickFx(now) {
-    if (!fxCtx) return;
+  function tickFx() {
+    if (!fxCtx) {
+      requestAnimationFrame(tickFx);
+      return;
+    }
     const ctx = fxCtx;
     const dpr = devicePixelRatio || 1;
     ctx.clearRect(0, 0, fxCanvas.width, fxCanvas.height);
@@ -59,14 +68,15 @@
       p.x += p.vx;
       p.y += p.vy;
       p.vy += p.g || 0;
+      p.vx *= 0.99;
       if (p.life <= 0) {
         particles.splice(i, 1);
         continue;
       }
-      ctx.globalAlpha = Math.max(0, p.life);
+      ctx.globalAlpha = Math.max(0, Math.min(1, p.life));
       ctx.fillStyle = p.color;
       ctx.beginPath();
-      ctx.arc(p.x * dpr, p.y * dpr, (p.r || 2) * dpr, 0, Math.PI * 2);
+      ctx.arc(p.x * dpr, p.y * dpr, Math.max(0.5, (p.r || 2) * dpr * (0.6 + p.life)), 0, Math.PI * 2);
       ctx.fill();
     }
     ctx.globalAlpha = 1;
@@ -75,9 +85,7 @@
       shakeT -= 16;
       const el = root();
       const a = (shakeT / 100) * shakeMag;
-      const x = (Math.random() - 0.5) * a;
-      const y = (Math.random() - 0.5) * a;
-      el.style.transform = `translate(${x}px, ${y}px)`;
+      el.style.transform = `translate(${(Math.random() - 0.5) * a}px, ${(Math.random() - 0.5) * a}px)`;
       if (shakeT <= 0) el.style.transform = "";
     }
     requestAnimationFrame(tickFx);
@@ -89,89 +97,142 @@
     } catch (_) {}
   }
 
+  function centerBurst(opts) {
+    Feel.burst(window.innerWidth / 2, window.innerHeight * 0.45, opts);
+  }
+
   const Feel = {
-    /** 畫面晃動 */
     shake(mag = 8, ms = 120) {
       shakeMag = mag;
       shakeT = Math.max(shakeT, ms);
       ensureFx();
     },
-    /** 全螢幕閃一下 */
     flash(color = "#fff", ms = 70) {
       const el = ensureFlash();
       el.style.background = color;
-      el.style.opacity = "0.35";
+      el.style.opacity = "0.28";
       setTimeout(() => {
         el.style.opacity = "0";
       }, ms);
     },
-    /** 粒子爆开（client 座標） */
     burst(x, y, opts = {}) {
       ensureFx();
-      const n = opts.n || 10;
+      const n = opts.n || 12;
       const color = opts.color || "#d4a017";
+      const colors = opts.colors || [color];
       for (let i = 0; i < n; i++) {
         const a = Math.random() * Math.PI * 2;
-        const sp = (opts.speed || 3) * (0.4 + Math.random());
+        const sp = (opts.speed || 3.2) * (0.35 + Math.random());
         particles.push({
           x,
           y,
           vx: Math.cos(a) * sp,
           vy: Math.sin(a) * sp,
-          g: opts.g ?? 0.08,
-          life: 0.35 + Math.random() * 0.35,
-          r: opts.r || 2 + Math.random() * 2,
+          g: opts.g ?? 0.07,
+          life: opts.life || 0.4 + Math.random() * 0.45,
+          r: opts.r || 2 + Math.random() * 2.5,
+          color: colors[(Math.random() * colors.length) | 0],
+        });
+      }
+    },
+    burstCanvas(canvas, x, y, opts) {
+      if (!canvas) {
+        centerBurst(opts);
+        return;
+      }
+      const r = canvas.getBoundingClientRect();
+      Feel.burst(r.left + x * (r.width / canvas.width), r.top + y * (r.height / canvas.height), opts);
+    },
+    ring(x, y, color = "#3cb371") {
+      ensureFx();
+      for (let i = 0; i < 16; i++) {
+        const a = (i / 16) * Math.PI * 2;
+        particles.push({
+          x,
+          y,
+          vx: Math.cos(a) * 4.2,
+          vy: Math.sin(a) * 4.2,
+          g: 0,
+          life: 0.45,
+          r: 2.2,
           color,
         });
       }
     },
-    /** canvas 內座標 → 爆开 */
-    burstCanvas(canvas, x, y, opts) {
-      if (!canvas) return;
-      const r = canvas.getBoundingClientRect();
-      const sx = r.width / canvas.width;
-      const sy = r.height / canvas.height;
-      Feel.burst(r.left + x * sx, r.top + y * sy, opts);
-    },
+    /** 命中：粒子為主 + 輕晃／閃 */
     hit(mag = 6) {
-      Feel.shake(mag, 100);
-      Feel.flash("rgba(255,255,255,0.9)", 50);
-      vibrate(12);
+      centerBurst({
+        n: 14 + mag,
+        speed: 2.8 + mag * 0.15,
+        colors: ["#fff3c4", "#d4a017", "#e7f0ea"],
+      });
+      Feel.shake(Math.max(3, mag * 0.55), 90);
+      Feel.flash("rgba(255,243,196,0.85)", 45);
+      vibrate(10);
     },
+    /** 受傷：紅粒子為主 + 晃／閃 */
     hurt() {
-      Feel.shake(10, 140);
-      Feel.flash("rgba(228,87,46,0.95)", 80);
-      vibrate([20, 30, 20]);
+      centerBurst({
+        n: 22,
+        speed: 4.5,
+        colors: ["#e4572e", "#c45c48", "#f0a090", "#fff"],
+        g: 0.12,
+      });
+      Feel.shake(9, 130);
+      Feel.flash("rgba(228,87,46,0.9)", 75);
+      vibrate([18, 28, 18]);
     },
     score(canvas, x, y) {
-      Feel.burstCanvas(canvas, x, y, { color: "#3cb371", n: 8, speed: 2.5 });
+      Feel.burstCanvas(canvas, x, y, {
+        n: 12,
+        speed: 2.8,
+        colors: ["#3cb371", "#8fd694", "#fff3c4"],
+      });
+      Feel.shake(2, 50);
       vibrate(8);
     },
     boom(canvas, x, y) {
-      Feel.burstCanvas(canvas, x, y, { color: "#d4a017", n: 14, speed: 4 });
-      Feel.shake(7, 110);
-      vibrate(18);
+      Feel.burstCanvas(canvas, x, y, {
+        n: 20,
+        speed: 4.4,
+        colors: ["#d4a017", "#e4572e", "#fff3c4", "#e7f0ea"],
+      });
+      if (canvas) {
+        const r = canvas.getBoundingClientRect();
+        Feel.ring(r.left + x * (r.width / canvas.width), r.top + y * (r.height / canvas.height), "#d4a017");
+      }
+      Feel.shake(6, 110);
+      Feel.flash("rgba(212,160,23,0.55)", 55);
+      vibrate(16);
     },
     tap(el) {
-      if (!el || !el.animate) return;
-      el.animate(
-        [
-          { transform: "scale(1)" },
-          { transform: "scale(0.94)" },
-          { transform: "scale(1)" },
-        ],
-        { duration: 120, easing: "ease-out" }
-      );
+      const r = el && el.getBoundingClientRect ? el.getBoundingClientRect() : null;
+      if (r) {
+        Feel.burst(r.left + r.width / 2, r.top + r.height / 2, {
+          n: 8,
+          speed: 2.2,
+          colors: ["#3cb371", "#d4a017"],
+          g: 0.05,
+          life: 0.3,
+        });
+      } else {
+        centerBurst({ n: 8, speed: 2.2, colors: ["#3cb371", "#d4a017"] });
+      }
+      if (el && el.animate) {
+        el.animate(
+          [{ transform: "scale(1)" }, { transform: "scale(0.94)" }, { transform: "scale(1)" }],
+          { duration: 120, easing: "ease-out" }
+        );
+      }
       vibrate(6);
     },
   };
 
-  // Auto-bind buttons
   document.addEventListener(
     "pointerdown",
     (e) => {
       const b = e.target && e.target.closest && e.target.closest("button");
-      if (b && window.Feel) Feel.tap(b);
+      if (b && !b.closest("#mobile-pad") && window.Feel) Feel.tap(b);
     },
     true
   );

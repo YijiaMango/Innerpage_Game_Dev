@@ -37,7 +37,7 @@ function update(dt) {
     state.y = Math.max(16, Math.min(canvas.height - 16, state.y + (my / len) * 200 * dt));
   }
   state.fireCd -= dt;
-  if (mouse.down && state.fireCd <= 0) {
+  if ((mouse.down || KEYS.has("Space")) && state.fireCd <= 0) {
     const ang = Math.atan2(mouse.y - state.y, mouse.x - state.x);
     state.bullets.push({ x: state.x, y: state.y, vx: Math.cos(ang) * 520, vy: Math.sin(ang) * 520, life: 0.9 });
     state.fireCd = 0.12;

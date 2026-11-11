@@ -97,6 +97,17 @@ function render() {
 }
 window.addEventListener("keydown", (e) => { KEYS.add(e.code); if (e.code.startsWith("Arrow")) e.preventDefault(); });
 window.addEventListener("keyup", (e) => KEYS.delete(e.code));
+canvas.addEventListener("pointermove", (e) => {
+  if (e.pointerType === "mouse" && e.buttons === 0) return;
+  const rect = canvas.getBoundingClientRect();
+  const x = ((e.clientX - rect.left) / rect.width) * canvas.width;
+  state.x = Math.max(16, Math.min(canvas.width - 16, x));
+});
+canvas.addEventListener("pointerdown", (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const x = ((e.clientX - rect.left) / rect.width) * canvas.width;
+  state.x = Math.max(16, Math.min(canvas.width - 16, x));
+});
 document.getElementById("btn-restart").onclick = reset;
 let last = performance.now();
 function frame(now) {

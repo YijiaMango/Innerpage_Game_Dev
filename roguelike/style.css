@@ -154,3 +154,14 @@ button:disabled {
 }
 
 #game { image-rendering: pixelated; }
+
+/* 手機優先觸控 */
+button, .pad-btn {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+@media (max-width: 900px) {
+  .stat.muted { font-size: 0.8rem; }
+  .hud .brand { width: 100%; }
+  button { min-height: 44px; padding: 10px 14px; }
+}
